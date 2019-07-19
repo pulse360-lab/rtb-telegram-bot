@@ -76,7 +76,7 @@ workflows:
           requires:
             - build-app
       - prepare-deploy:
-        <<: *non-releasable
+          <<: *non-releasable
           requires:
             - test-app
       
