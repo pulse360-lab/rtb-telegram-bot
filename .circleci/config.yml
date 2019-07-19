@@ -75,10 +75,10 @@ workflows:
       - test-app:
           <<: *non-releasable
           <<: *only-releasable
-          requires:
-            - build-app
+            requires:
+              - build-app
       - prepare-deploy:
           <<: *non-releasable
-          requires:
-            - test-app
+            requires:
+              - test-app
       
