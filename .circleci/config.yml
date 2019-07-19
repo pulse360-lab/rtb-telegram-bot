@@ -59,9 +59,13 @@ workflows:
     jobs:
       - build-app:
           <<: *only-releasable
+      - build-app:
           <<: *non-releasable
       - test-app:
-          <<: *only-releasable
           <<: *non-releasable
           requires:
             - build-app
+      - test-app:
+        <<: *non-releasable
+            requires:
+              - build-app
