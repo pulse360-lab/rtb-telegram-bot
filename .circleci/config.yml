@@ -38,7 +38,7 @@ jobs:
           name: Build Project
           command: |
             #cd ${PROJECT}
-            npm install bluebird node-telegram-bot-api
+            npm install
       - save_cache:
           paths:
             - node_modules
