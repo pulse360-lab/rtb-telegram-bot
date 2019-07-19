@@ -1,0 +1,165 @@
+version: 2.1
+defaults: &defaults
+  environment:
+    PROJECT: realtime-bus
+  #working_directory: ~/${PROJECT}
+  docker:
+     - image: circleci/node:10.16.0
+only-user-acceptance: &only-user-acceptance
+  filters:
+    branches:
+      only:
+        - user-acceptance
+only-releasable: &only-releasable
+  filters:
+    branches:
+      only:
+        - develop
+        - patch
+non-releasable: &non-releasable
+  filters:
+    branches:
+      ignore:
+        - master
+        - develop
+        - patch
+        
+jobs:
+  build-app:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Build Project
+          command: |
+            #cd ${PROJECT}
+            npm install bluebird eslint node-telegram-bot-api
+            ls
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+  test-app:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Unit Test
+          command: |
+            npm --verbose test || true
+  prepare-dev-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prepare Dev Environment
+          command: |
+            npm --verbose test || true
+
+  prepare-uat-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prepare Uat Environment
+          command: |
+            npm --verbose test || true
+  deploy-dev:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Dev Environment
+          command: |
+            npm --verbose test || true
+
+  deploy-uat:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Uat Environment
+          command: |
+            npm --verbose test || true
+  pre-prod:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Pre Prod Environment
+          command: |
+            npm --verbose test || true
+
+  prod-promotion:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prod Promotion
+          command: |
+            npm --verbose test || true
+            
+workflows:
+  version: 2.1
+  realtime-bus-workflow:
+    jobs:
+      - build-app
+      - test-app:
+          requires:
+            - build-app
+      - prepare-dev-deploy:
+          <<: *non-releasable
+          requires:
+            - test-app
+      - prepare-uat-deploy:
+          <<: *only-user-acceptance
+          requires:
+            - test-app
+      - deploy-dev:
+          requires:
+            - prepare-dev-deploy
+      - deploy-uat:
+          <<: *only-user-acceptance
+          requires:
+            - prepare-uat-deploy
+      - pre-prod:
+          <<: *only-releasable
+          requires:
+            - test-app
+      - prod-promotion:
+          filters:
+            branches:
+              only:
+                - master
