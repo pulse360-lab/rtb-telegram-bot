@@ -60,7 +60,7 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
       - run:
-          name: Unit Test
+          name: Prepare Dev Environment
           command: |
             npm --verbose test || true
 
