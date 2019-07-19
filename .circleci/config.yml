@@ -53,8 +53,6 @@ jobs:
             npm --verbose test || true
   prepare-dev-deploy:
     <<: *defaults
-    docker:
-      - image: circleci/node:10.16.0
     steps:
       - checkout
       - restore_cache:
