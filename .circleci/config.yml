@@ -159,6 +159,9 @@ workflows:
           requires:
             - test-app
       - prod-promotion:
+          type: approval
+          requires:
+            - test-app
           filters:
             branches:
               only:
