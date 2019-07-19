@@ -54,8 +54,7 @@ jobs:
       - run:
           name: Unit Test
           command: |
-            export RTB_TELEGRAM_BOT_TOKEN=${RTB_TELEGRAM_BOT_TOKEN}
-            export
+            sed -i 's/${RTB_TELEGRAM_BOT_TOKEN}/'${RTB_TELEGRAM_BOT_TOKEN}/ config.json
             node ${BOT_NAME}
   prepare-dev-deploy:
     <<: *defaults
