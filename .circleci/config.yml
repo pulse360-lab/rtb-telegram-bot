@@ -138,5 +138,9 @@ workflows:
       - deploy-dev:
           requires:
             - prepare-dev-deploy
-      - deploy-uat
+      - deploy-uat:
+          <<: *only-user-acceptance
+          requires:
+            - prepare-uat-deploy
       - prod-promotion
+          <<: *only-releasable
