@@ -1,0 +1,68 @@
+version: 2.1
+defaults: &defaults
+  environment:
+    PROJECT: realtime-bus
+only-releasable: &only-releasable
+  filters:
+    branches:
+      only:
+        - master
+        - develop
+        - patch
+non-releasable: &non-releasable
+  filters:
+    branches:
+      ignore:
+        - master
+        - develop
+        - patch
+        
+jobs:
+  build-app:
+    <<: *defaults
+    docker:
+      - image: circleci/node
+    #working_directory: ~/${PROJECT}
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Build Project
+          command: |
+            #cd ${PROJECT}
+            npm install bluebird eslint node-telegram-bot-api
+            ls
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+  test-app:
+    <<: *defaults
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Unit Test
+          command: |
+            #npm run -s lint
+            ls -lrt
+workflows:
+  version: 2.1
+  realtime-bus-workflow:
+    jobs:
+      - build-app:
+          <<: *only-releasable
+          <<: *non-releasable
+      - test-app:
+          <<: *only-releasable
+          <<: *non-releasable
+          requires:
+            - build-app

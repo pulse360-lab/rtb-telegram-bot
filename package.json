@@ -1,0 +1,22 @@
+{
+  "name": "realtime-bus",
+  "version": "1.0.0",
+  "description": "service provide for checking the delay time of the buses services by using Telegram and public web API integrations",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexandreYembo/realtime-bus.git"
+  },
+  "author": "realtimebus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexandreYembo/realtime-bus/issues"
+  },
+  "homepage": "https://github.com/AlexandreYembo/realtime-bus#readme",
+  "dependencies": {
+    "bluebird": "^3.5.5"
+  }
+}
