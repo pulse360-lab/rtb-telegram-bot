@@ -1,0 +1,16 @@
+{	
+	"authorizationToken" : "755810834:AAEvgN1dQBwvchjrk4crwrxSwhayoOr7gT4",
+	"config" : {
+		"adminUsers" : [1,2,3],
+		"customCommands" : [
+			{ 
+				"stop" : ["my command 1"],
+				"executeWithSpawn" : true
+			},
+			{
+				"testing" : "echo 'not executing with spawn'"
+			}
+		],
+		"deniedCommands" : ["rm", "rmdir", "shutdown", "halt", "sudo", "mv", "touch", "chmod", "wget", "curl", "echo"]
+	}
+}

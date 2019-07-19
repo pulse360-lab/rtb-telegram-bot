@@ -3,8 +3,12 @@ class APIClientBase{
         this.client = client;
     }
 
-    getInformation(){
+    getStopInformation(id){
         return null;   
+    }
+
+    setBaseUri(url){
+        this.baseUrl = url;
     }
 }
 
