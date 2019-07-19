@@ -65,7 +65,7 @@ jobs:
             sed -i 's/${RTB_TELEGRAM_BOT_TOKEN}/'${RTB_TELEGRAM_BOT_TOKEN}/ config.json
             
             #Bot will run for 5 min for testing
-            timeout 300 node ${BOT_NAME}
+            timeout 300 node ${BOT_NAME} || true
 
             message="I am shutting down now\n"
             message+="Thanks for testing!"
