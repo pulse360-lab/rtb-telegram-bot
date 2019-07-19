@@ -136,5 +136,7 @@ workflows:
           requires:
             - test-app
       - deploy-dev
+          requires:
+            - prepare-dev-deploy
       - deploy-uat
       - prod-promotion
