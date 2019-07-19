@@ -53,6 +53,20 @@ jobs:
           name: Unit Test
           command: |
             npm --verbose test || true
+  prepare-deploy:
+    <<: *defaults
+    docker:
+      - image: circleci/node:10.16.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Unit Test
+          command: |
+            npm --verbose test || true
 workflows:
   version: 2.1
   realtime-bus-workflow:
@@ -61,6 +75,6 @@ workflows:
       - test-app:
           requires:
             - build-app
-      - build-app:
+      - prepare-deploy:
         <<: *non-releasable
       
