@@ -4,7 +4,7 @@ export const Localization = [{
     Id: cities.DUBLIN_ID,
     Latitude: "44444",
     Longitude: "66666",
-    APIBaseURL: "https://data.smartdublin.ie/cgi-bin/rtpi/",
+    APIBaseURL: ,
     getRealTimeEndpoint: "realtimebusinformation"
 },
 {
