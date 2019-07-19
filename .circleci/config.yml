@@ -51,7 +51,7 @@ jobs:
           name: Unit Test
           command: |
             npm --verbose test || true
-  prepare-deploy:
+  prepare-dev-deploy:
     <<: *defaults
     docker:
       - image: circleci/node:10.16.0
@@ -70,11 +70,11 @@ workflows:
   version: 2.1
   realtime-bus-workflow:
     jobs:
-      - build-app:
-          <<: *only-releasable
-          <<: *non-releasable
+      - build-app
       - test-app:
-          <<: *only-releasable
-          <<: *non-releasable
           requires:
             - build-app
+      - prepare-dev-deploy:
+          <<: *non-releasable
+          requires:
+            - test-app
