@@ -14,7 +14,6 @@ only-releasable: &only-releasable
   filters:
     branches:
       only:
-        - master
         - develop
         - patch
 non-releasable: &non-releasable
@@ -143,4 +142,7 @@ workflows:
           requires:
             - prepare-uat-deploy
       - prod-promotion:
-          <<: *only-releasable
+          filters:
+            branches:
+              only:
+                - master
