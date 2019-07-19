@@ -2,6 +2,9 @@ version: 2.1
 defaults: &defaults
   environment:
     PROJECT: realtime-bus
+  #working_directory: ~/${PROJECT}
+  docker:
+     image: circleci/node:10.16.0
 only-releasable: &only-releasable
   filters:
     branches:
@@ -20,9 +23,6 @@ non-releasable: &non-releasable
 jobs:
   build-app:
     <<: *defaults
-    docker:
-      - image: circleci/node:10.16.0
-    #working_directory: ~/${PROJECT}
     steps:
       - checkout
       - restore_cache:
@@ -41,8 +41,6 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
   test-app:
     <<: *defaults
-    docker:
-      - image: circleci/node:10.16.0
     steps:
       - checkout
       - restore_cache:
