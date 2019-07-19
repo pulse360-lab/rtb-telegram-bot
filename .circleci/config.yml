@@ -71,10 +71,10 @@ workflows:
   realtime-bus-workflow:
     jobs:
       - build-app:
-        <<: *only-releasable
-        <<: *non-releasable
+          <<: *only-releasable
+          <<: *non-releasable
       - test-app:
-        <<: *only-releasable
-        <<: *non-releasable
+          <<: *only-releasable
+          <<: *non-releasable
           requires:
             - build-app
