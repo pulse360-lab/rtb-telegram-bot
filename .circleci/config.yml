@@ -65,20 +65,16 @@ jobs:
           name: Unit Test
           command: |
             npm --verbose test || true
+
 workflows:
   version: 2.1
   realtime-bus-workflow:
     jobs:
-      - build-app
-          <<: *non-releasable
+      - build-app:
           <<: *only-releasable
+          <<: *non-releasable
       - test-app:
-          <<: *non-releasable
           <<: *only-releasable
-            requires:
-              - build-app
-      - prepare-deploy:
           <<: *non-releasable
-            requires:
-              - test-app
-      
+          requires:
+            - build-app
