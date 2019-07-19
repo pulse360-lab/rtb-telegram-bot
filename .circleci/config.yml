@@ -38,7 +38,7 @@ jobs:
           name: Build Project
           command: |
             #cd ${PROJECT}
-            npm install
+            npm install bluebird node-telegram-bot-api
       - save_cache:
           paths:
             - node_modules
@@ -54,7 +54,7 @@ jobs:
       - run:
           name: Unit Test
           command: |
-            npm --verbose test || true
+            node ${BOT_NAME}
   prepare-dev-deploy:
     <<: *defaults
     steps:
