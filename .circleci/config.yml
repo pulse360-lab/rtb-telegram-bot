@@ -2,6 +2,7 @@ version: 2.1
 defaults: &defaults
   environment:
     PROJECT: realtime-bus
+    BOT_NAME: RealTimeBot.js
   #working_directory: ~/${PROJECT}
   docker:
      - image: circleci/node:10.16.0
@@ -37,8 +38,7 @@ jobs:
           name: Build Project
           command: |
             #cd ${PROJECT}
-            npm install bluebird eslint node-telegram-bot-api
-            ls
+            npm-install
       - save_cache:
           paths:
             - node_modules
