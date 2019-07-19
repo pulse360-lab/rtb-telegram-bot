@@ -5,6 +5,11 @@ defaults: &defaults
   #working_directory: ~/${PROJECT}
   docker:
      - image: circleci/node:10.16.0
+only-user-acceptance: &only-user-acceptance
+  filters:
+    branches:
+      only:
+        - user-acceptance
 only-releasable: &only-releasable
   filters:
     branches:
@@ -64,6 +69,19 @@ jobs:
           command: |
             npm --verbose test || true
 
+  prepare-uat-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prepare Uat Environment
+          command: |
+            npm --verbose test || true
+            
 workflows:
   version: 2.1
   realtime-bus-workflow:
@@ -74,5 +92,9 @@ workflows:
             - build-app
       - prepare-dev-deploy:
           <<: *non-releasable
+          requires:
+            - test-app
+      - prepare-uat-deploy:
+          <<: *only-user-acceptance
           requires:
             - test-app
