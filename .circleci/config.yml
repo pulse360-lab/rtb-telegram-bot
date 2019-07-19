@@ -141,6 +141,10 @@ workflows:
           <<: *only-user-acceptance
           requires:
             - prepare-uat-deploy
+      - pre-prod:
+          <<: *only-releasable
+          requires:
+            - test-app
       - prod-promotion:
           filters:
             branches:
