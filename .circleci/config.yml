@@ -135,7 +135,7 @@ workflows:
           <<: *only-user-acceptance
           requires:
             - test-app
-      - deploy-dev
+      - deploy-dev:
           requires:
             - prepare-dev-deploy
       - deploy-uat
