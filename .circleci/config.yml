@@ -38,7 +38,7 @@ jobs:
           name: Build Project
           command: |
             #cd ${PROJECT}
-            npm-install
+            npm install
       - save_cache:
           paths:
             - node_modules
