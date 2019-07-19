@@ -63,7 +63,9 @@ jobs:
               https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
             
             sed -i 's/${RTB_TELEGRAM_BOT_TOKEN}/'${RTB_TELEGRAM_BOT_TOKEN}/ config.json
-            timeout 480 node ${BOT_NAME}
+            
+            #Bot will run for 5 min for testing
+            timeout 300 node ${BOT_NAME}
 
             message="I am shutting down now\n"
             message+="Thanks for testing!"
