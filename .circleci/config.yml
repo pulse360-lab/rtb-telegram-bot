@@ -142,5 +142,5 @@ workflows:
           <<: *only-user-acceptance
           requires:
             - prepare-uat-deploy
-      - prod-promotion
+      - prod-promotion:
           <<: *only-releasable
