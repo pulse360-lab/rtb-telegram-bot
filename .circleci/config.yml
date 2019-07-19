@@ -62,7 +62,7 @@ workflows:
       - build-app:
           <<: *non-releasable
       - test-app:
-          <<: *non-releasable
+          <<: *only-releasable
           requires:
             - build-app
       - test-app:
