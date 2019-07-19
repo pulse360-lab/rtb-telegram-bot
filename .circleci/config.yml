@@ -161,7 +161,7 @@ workflows:
       - prod-promotion:
           type: approval
           requires:
-            - test-app
+            - pre-prod
           filters:
             branches:
               only:
