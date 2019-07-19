@@ -77,4 +77,6 @@ workflows:
             - build-app
       - prepare-deploy:
         <<: *non-releasable
+          requires:
+            - test-app
       
