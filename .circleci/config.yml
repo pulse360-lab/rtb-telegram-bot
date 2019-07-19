@@ -52,8 +52,7 @@ jobs:
       - run:
           name: Unit Test
           command: |
-            #npm run -s lint
-            ls -lrt
+            npm --verbose test || true
 workflows:
   version: 2.1
   realtime-bus-workflow:
