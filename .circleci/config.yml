@@ -105,6 +105,19 @@ jobs:
           name: Deploy to Uat Environment
           command: |
             npm --verbose test || true
+  pre-prod:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Pre Prod Environment
+          command: |
+            npm --verbose test || true
+
   prod-promotion:
     <<: *defaults
     steps:
