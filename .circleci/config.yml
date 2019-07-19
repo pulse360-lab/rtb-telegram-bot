@@ -81,6 +81,43 @@ jobs:
           name: Prepare Uat Environment
           command: |
             npm --verbose test || true
+  deploy-dev:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Dev Environment
+          command: |
+            npm --verbose test || true
+
+  deploy-uat:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Uat Environment
+          command: |
+            npm --verbose test || true
+  prod-promotion:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prod Promotion
+          command: |
+            npm --verbose test || true
             
 workflows:
   version: 2.1
@@ -98,3 +135,6 @@ workflows:
           <<: *only-user-acceptance
           requires:
             - test-app
+      - deploy-dev
+      - deploy-uat
+      - prod-promotion
