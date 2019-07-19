@@ -2,11 +2,18 @@ version: 2.1
 defaults: &defaults
   environment:
     PROJECT: realtime-bus
+  #working_directory: ~/${PROJECT}
+  docker:
+     - image: circleci/node:10.16.0
+only-user-acceptance: &only-user-acceptance
+  filters:
+    branches:
+      only:
+        - user-acceptance
 only-releasable: &only-releasable
   filters:
     branches:
       only:
-        - master
         - develop
         - patch
 non-releasable: &non-releasable
@@ -20,9 +27,6 @@ non-releasable: &non-releasable
 jobs:
   build-app:
     <<: *defaults
-    docker:
-      - image: circleci/node:10.16.0
-    #working_directory: ~/${PROJECT}
     steps:
       - checkout
       - restore_cache:
@@ -41,8 +45,6 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
   test-app:
     <<: *defaults
-    docker:
-      - image: circleci/node:10.16.0
     steps:
       - checkout
       - restore_cache:
@@ -52,17 +54,95 @@ jobs:
       - run:
           name: Unit Test
           command: |
-            #npm run -s lint
-            ls -lrt
+            npm --verbose test || true
+  prepare-dev-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prepare Dev Environment
+          command: |
+            npm --verbose test || true
+
+  prepare-uat-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prepare Uat Environment
+          command: |
+            npm --verbose test || true
+  deploy-dev:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Dev Environment
+          command: |
+            npm --verbose test || true
+
+  deploy-uat:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Deploy to Uat Environment
+          command: |
+            npm --verbose test || true
+  prod-promotion:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Prod Promotion
+          command: |
+            npm --verbose test || true
+            
 workflows:
   version: 2.1
   realtime-bus-workflow:
     jobs:
-      - build-app:
-          <<: *only-releasable
-          <<: *non-releasable
+      - build-app
       - test-app:
-          <<: *only-releasable
-          <<: *non-releasable
           requires:
             - build-app
+      - prepare-dev-deploy:
+          <<: *non-releasable
+          requires:
+            - test-app
+      - prepare-uat-deploy:
+          <<: *only-user-acceptance
+          requires:
+            - test-app
+      - deploy-dev:
+          requires:
+            - prepare-dev-deploy
+      - deploy-uat:
+          <<: *only-user-acceptance
+          requires:
+            - prepare-uat-deploy
+      - prod-promotion:
+          filters:
+            branches:
+              only:
+                - master
