@@ -23,6 +23,8 @@ non-releasable: &non-releasable
 jobs:
   build-app:
     <<: *defaults
+    <<:* non-releasable
+    <<:* only-releasable
     steps:
       - checkout
       - restore_cache:
@@ -41,6 +43,8 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
   test-app:
     <<: *defaults
+    <<:* non-releasable
+    <<:* only-releasable
     steps:
       - checkout
       - restore_cache:
@@ -53,6 +57,7 @@ jobs:
             npm --verbose test || true
   prepare-deploy:
     <<: *defaults
+    <<:* non-releasable
     docker:
       - image: circleci/node:10.16.0
     steps:
@@ -74,7 +79,6 @@ workflows:
           requires:
             - build-app
       - prepare-deploy:
-          <<: *non-releasable
           requires:
             - test-app
       
