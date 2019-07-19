@@ -57,11 +57,10 @@ workflows:
   version: 2.1
   realtime-bus-workflow:
     jobs:
-      - build-app:
-          <<: *only-releasable
-          <<: *non-releasable
+      - build-app
       - test-app:
-          <<: *only-releasable
-          <<: *non-releasable
           requires:
             - build-app
+      - build-app:
+        << *non-releasable
+      
