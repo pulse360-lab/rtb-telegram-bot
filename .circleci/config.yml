@@ -2,6 +2,7 @@ version: 2.1
 defaults: &defaults
   environment:
     PROJECT: realtime-bus
+    BOT_NAME: RealTimeBot.js
   #working_directory: ~/${PROJECT}
   docker:
      - image: circleci/node:10.16.0
@@ -37,8 +38,7 @@ jobs:
           name: Build Project
           command: |
             #cd ${PROJECT}
-            npm install bluebird eslint node-telegram-bot-api
-            ls
+            npm install
       - save_cache:
           paths:
             - node_modules
@@ -52,9 +52,30 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
       - run:
-          name: Unit Test
+          name: Bot Test
           command: |
-            npm --verbose test || true
+            message="I am online for about 8 minutes for testing\n"
+            message+="Start testing /stop 10"
+            curl -s \
+              -X POST \
+              -d chat_id=${GROUP_TELEGRAM_ID} \
+              -d text="$(echo -e ${message})" \
+              https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
+            
+            sed -i 's/${RTB_TELEGRAM_BOT_TOKEN}/'${RTB_TELEGRAM_BOT_TOKEN}/ config.json
+            
+            #Bot will run for 8 min for testing
+            #8 min because circleCi will automatically fail on timeout in 10 min
+            timeout 480 node ${BOT_NAME} || true
+
+            message="I am shutting down now\n"
+            message+="Thanks for testing!"
+            message+="For testing, please run circleCi job again any time you want..."
+            curl -s \
+              -X POST \
+              -d chat_id=${GROUP_TELEGRAM_ID} \
+              -d text="$(echo -e ${message})" \
+              https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
   prepare-dev-deploy:
     <<: *defaults
     steps:
@@ -161,7 +182,7 @@ workflows:
       - prod-promotion:
           type: approval
           requires:
-            - test-app
+            - pre-prod
           filters:
             branches:
               only:
