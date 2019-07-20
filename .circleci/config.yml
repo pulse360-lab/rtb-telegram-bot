@@ -54,8 +54,8 @@ jobs:
       - run:
           name: Bot Test
           command: |
-            message="I am online for testing\n"
-            message+="Start testing /stop '10'"
+            message="I am online for about 8 minutes for testing\n"
+            message+="Start testing /stop 10"
             curl -s \
               -X POST \
               -d chat_id=${GROUP_TELEGRAM_ID} \
@@ -64,11 +64,13 @@ jobs:
             
             sed -i 's/${RTB_TELEGRAM_BOT_TOKEN}/'${RTB_TELEGRAM_BOT_TOKEN}/ config.json
             
-            #Bot will run for 5 min for testing
-            timeout 300 node ${BOT_NAME} || true
+            #Bot will run for 8 min for testing
+            #8 min because circleCi will automatically fail on timeout in 10 min
+            timeout 480 node ${BOT_NAME} || true
 
             message="I am shutting down now\n"
             message+="Thanks for testing!"
+            message+="For testing, please run circleCi job again any time you want..."
             curl -s \
               -X POST \
               -d chat_id=${GROUP_TELEGRAM_ID} \
