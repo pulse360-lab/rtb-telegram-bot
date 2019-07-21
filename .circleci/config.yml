@@ -53,8 +53,8 @@ jobs:
       - run:
           name: Bot Test
           command: |
-            echo "-----branch: ${CIRCLE_BRANCH}"
-            if [[ ${CIRCLE_BRANCH} != "dodopontocom-patch-1" ]]; then
+            branch_regex='[dmp][ea][vst][etc][leh]*'
+            if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
               message="I am online for about 8 minutes for testing\n"
               message+="${CIRCLE_BRANCH}"
               curl -X POST \
