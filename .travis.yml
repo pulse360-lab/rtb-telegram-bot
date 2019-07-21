@@ -2,7 +2,7 @@ language: generic
 script:
  - |
     if [[ "${TRAVIS_PULL_REQUEST}" != "false" ]]; then
-      #TRAVIS_COMMIT_MESSAGE
+      #####TRAVIS_COMMIT_MESSAGE
       pull_request_url=https://github.com/dodopontocom/realtime-bus-dev/pulls
       message="----- 📘 📟 ------------------------------\n"
       message+="New pull request is opened\n"
