@@ -10,11 +10,10 @@ script:
       message+="From branch: ${TRAVIS_PULL_REQUEST_BRANCH}\n\n"
       message+="${pull_request_url}"
       
-      curl -s \
-          -X POST \
-          -d chat_id=${GROUP_TELEGRAM_ID} \
-          -d text="$(echo -e ${message})" \
-          https://api.telegram.org/bot${ODROID_TELEGRAM_BOT_TOKEN}/sendMessage
+      curl -X POST \
+            -d chat_id=${GROUP_TELEGRAM_ID} \
+            -d text="$(echo -e ${message})" \
+            https://api.telegram.org/bot${ODROID_TELEGRAM_BOT_TOKEN}/sendMessage
     fi
 branches:
   only:
