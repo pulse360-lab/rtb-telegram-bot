@@ -1,5 +1,5 @@
 {	
-	"authorizationToken" : "904112506:AAFrWS1EwvIlBMexp3rxnMBwHFkSkUKGOP0",
+	"authorizationToken" : "${RTB_TELEGRAM_BOT_TOKEN}",
 	"config" : {
 		"adminUsers" : [1,2,3],
 		"customCommands" : [
