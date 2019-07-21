@@ -53,10 +53,12 @@ jobs:
       - run:
           name: Bot Test
           command: |
-            if [[ ${CIRCLE_BRANCH} != "master" ]] || [[ ${CIRCLE_BRANCH} != "patch" ]]; then
+            branch_regex='[dmp][ea][vst][etc][leh]*'
+            if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
               message="I am online for about 8 minutes for testing\n"
+              message+="${CIRCLE_BRANCH}"
               curl -X POST \
-                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d chat_id=${SUPPORT_GROUP_TELEGRAM_ID} \
                     -d text="$(echo -e ${message})" \
                     https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
               
@@ -71,13 +73,13 @@ jobs:
               message+="If you want to run the same test, trigger the following url again...\n"
               message+="https://circleci.com/gh/realtime-bus/node-telegram-bot/${CIRCLE_BUILD_NUM}"
               curl -X POST \
-                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d chat_id=${SUPPORT_GROUP_TELEGRAM_ID} \
                     -d text="$(echo -e ${message})" \
                     https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
             else
               message="Test passed on branch: ${CIRCLE_BRANCH}"
               curl -X POST \
-                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d chat_id=${SUPPORT_GROUP_TELEGRAM_ID} \
                     -d text="$(echo -e ${message})" \
                     https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
             fi
