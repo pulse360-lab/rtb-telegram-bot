@@ -53,7 +53,9 @@ jobs:
       - run:
           name: Bot Test
           command: |
-            branch_regex='[dmp][ea][vst][etc][leh]*'
+            #following regex represents master and patch strings
+            branch_regex='[mp][a][st][tc][eh]*'
+            #if master or patch then dont need to turn the bot on
             if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
               message="I am online for about 8 minutes for testing\n"
               message+="${CIRCLE_BRANCH}"
