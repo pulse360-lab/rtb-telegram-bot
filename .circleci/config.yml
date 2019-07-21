@@ -54,13 +54,7 @@ jobs:
           name: Bot Test
           command: |
             echo "-----branch: ${CIRCLE_BRANCH}"
-            if [[ "${CIRCLE_BRANCH}" == "dodoponto-patch-1" ]]; then
-              message="Test passed on branch: ${CIRCLE_BRANCH}"
-              curl -X POST \
-                    -d chat_id=${SUPPORT_GROUP_TELEGRAM_ID} \
-                    -d text="$(echo -e ${message})" \
-                    https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
-            else
+            if [[ ${CIRCLE_BRANCH} != "dodopontocom-patch-1" ]]; then
               message="I am online for about 8 minutes for testing\n"
               message+="${CIRCLE_BRANCH}"
               curl -X POST \
@@ -78,6 +72,12 @@ jobs:
               message+="Thanks for testing!\n\n"
               message+="If you want to run the same test, trigger the following url again...\n"
               message+="https://circleci.com/gh/realtime-bus/node-telegram-bot/${CIRCLE_BUILD_NUM}"
+              curl -X POST \
+                    -d chat_id=${SUPPORT_GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
+            else
+              message="Test passed on branch: ${CIRCLE_BRANCH}"
               curl -X POST \
                     -d chat_id=${SUPPORT_GROUP_TELEGRAM_ID} \
                     -d text="$(echo -e ${message})" \
