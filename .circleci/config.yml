@@ -69,7 +69,7 @@ jobs:
             timeout 480 node ${BOT_NAME} || true
 
             message="I am shutting down now\n"
-            message+="Thanks for testing!"
+            message+="Thanks for testing!\n\n"
             message+="For testing, please run circleCi job again any time you want..."
             curl -s \
               -X POST \
