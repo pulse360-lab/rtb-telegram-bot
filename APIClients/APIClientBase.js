@@ -3,13 +3,20 @@ class APIClientBase{
         this.client = client;
         this.httpClient = require('./HttpClient');
     }
+    setBaseUri(url){
+        this.baseUrl = url;
+    }
 
     getStopInformation(id){
         return null;   
     }
 
-    setBaseUri(url){
-        this.baseUrl = url;
+    getRealTimeInformation(id){
+
+    }
+
+    getAllStop(){
+        
     }
 }
 
