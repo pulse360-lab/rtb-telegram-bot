@@ -54,7 +54,7 @@ jobs:
           name: Bot Test
           command: |
             echo "-----branch: ${CIRCLE_BRANCH}"
-            if [[ ${CIRCLE_BRANCH} != "dodoponto-patch-1" ]] || [[ ${CIRCLE_BRANCH} != "master" ]] || [[ ${CIRCLE_BRANCH} != "patch" ]]; then
+            if [[ ${CIRCLE_BRANCH} != "dodoponto-patch-1" ]]; then
               message="I am online for about 8 minutes for testing\n"
               curl -X POST \
                     -d chat_id=${GROUP_TELEGRAM_ID} \
