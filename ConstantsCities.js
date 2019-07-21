@@ -1,4 +1,4 @@
 module.exports = {
-    DUBLIN_ID: "City01Dublin",
-    NetherlandsID: "City02Netherlands"
+    DUBLIN_ID: "Dublin",
+    NETHERLANDS_ID: "City02Netherlands"
 }
