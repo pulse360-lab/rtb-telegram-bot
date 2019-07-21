@@ -55,7 +55,6 @@ jobs:
           name: Bot Test
           command: |
             message="I am online for about 8 minutes for testing\n"
-            message+="Start testing /stop 10"
             curl -s \
               -X POST \
               -d chat_id=${GROUP_TELEGRAM_ID} \
@@ -70,7 +69,8 @@ jobs:
 
             message="I am shutting down now\n"
             message+="Thanks for testing!\n\n"
-            message+="For testing, please run circleCi job again any time you want..."
+            message+="If you want to run the same test, trigger the following url again...\n"
+            message+="https://circleci.com/gh/realtime-bus/node-telegram-bot/${CIRCLE_BUILD_NUM}"
             curl -s \
               -X POST \
               -d chat_id=${GROUP_TELEGRAM_ID} \
