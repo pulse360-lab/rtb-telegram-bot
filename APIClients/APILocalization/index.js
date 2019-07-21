@@ -1,3 +1,3 @@
 module.exports = {
-    DublinAPI: require('./DublinAPIClient')
+    DublinAPI: require('./Dublin/DublinAPIClient')
 };
