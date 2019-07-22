@@ -3,7 +3,7 @@ defaults: &defaults
   environment:
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
-    SCRIPTS_FOLDER: ${CIRCLE_WORKING_DIRECTORY}/_scripts
+    SCRIPTS_FOLDER: _scripts
   docker:
      - image: circleci/node:10.16.0
 only-user-acceptance: &only-user-acceptance
@@ -119,10 +119,6 @@ jobs:
       - run:
           name: Prepare Dev Environment
           command: |
-            pwd
-            export
-            ls
-            echo "__+_+_+_+ ${GIT_COMMIT_DESC}"
             source ${SCRIPTS_FOLDER}/increment_version.sh
             increment.version -m 10.0.130
 
