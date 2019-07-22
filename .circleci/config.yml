@@ -58,7 +58,7 @@ jobs:
             echo "-------------${GIT_COMMIT_DESC}"
             #the following regex represents master and patch matcches
             branch_regex='[mp][a][st][tc][eh]*'
-            skip_test_regex='[\[skip test\]]'
+            skip_test_regex='[skip test]'
             
             #if master or patch then dont need to turn the bot on
             if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
