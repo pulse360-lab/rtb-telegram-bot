@@ -55,6 +55,7 @@ jobs:
       - run:
           name: Bot Test
           command: |
+            export GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)" >> ${BASH_ENV}
             echo "-------------${GIT_COMMIT_DESC}"
             #the following regex represents master and patch matcches
             branch_regex='[mp][a][st][tc][eh]*'
