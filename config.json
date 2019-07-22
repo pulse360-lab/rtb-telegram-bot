@@ -1,5 +1,5 @@
 {	
-	"authorizationToken" : "${RTB_TELEGRAM_BOT_TOKEN}",
+	"authorizationToken" : "${RTB_BOT_TOKEN}",
 	"config" : {
 		"adminUsers" : [1,2,3],
 		"customCommands" : [
