@@ -122,8 +122,8 @@ jobs:
           name: Prepare Dev Environment
           command: |
             /bin/bash ./${SCRIPTS_FOLDER}/git_setup.sh $GITHUB_EMAIL $GITHUB_USER_NAME
-            add_version=$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION))
-            echo "0000" >> ./VERSION
+            add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION | cut -d'-' -f1))"
+            echo "${add_version}-build-${CIRCLE_BUILD_NUM}" >> ./VERSION
             git add ./VERSION
             git commit -m "[skip ci] build-${CIRCLE_BUILD_NUM}"
             git push origin ${CIRCLE_BRANCH}
