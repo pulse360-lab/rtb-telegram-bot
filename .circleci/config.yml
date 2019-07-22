@@ -119,7 +119,11 @@ jobs:
       - run:
           name: Prepare Dev Environment
           command: |
-            /bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m 10.0.130
+            add_version=$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 VERSION))
+            echo "add_version" >> VERSION
+            git add VERSION
+            git commit -m "[skip ci] new version testing"
+            git push origin ${CIRCLE_BRANCH}
 
   prepare-uat-deploy:
     <<: *defaults
