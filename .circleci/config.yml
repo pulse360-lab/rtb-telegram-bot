@@ -53,7 +53,7 @@ jobs:
       - run:
           name: Bot Test
           command: |
-            #following regex represents master and patch strings
+            #the following regex represents master and patch matcches
             branch_regex='[mp][a][st][tc][eh]*'
             #if master or patch then dont need to turn the bot on
             if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
@@ -154,6 +154,7 @@ jobs:
           name: Deploy to Pre Prod Environment
           command: |
             RTB_BOT_TOKEN=${RTB_BOT_TOKEN_PROD}
+            GROUP_TELEGRAM_ID=${PROD_GROUP_TELEGRAM_ID}
             npm --verbose test || true
 
   prod-promotion:
@@ -168,6 +169,7 @@ jobs:
           name: Prod Promotion
           command: |
             RTB_BOT_TOKEN=${RTB_BOT_TOKEN_PROD}
+            GROUP_TELEGRAM_ID=${PROD_GROUP_TELEGRAM_ID}
             npm --verbose test || true
             
 workflows:
