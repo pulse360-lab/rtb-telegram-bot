@@ -3,7 +3,7 @@ defaults: &defaults
   environment:
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
-    GIT_COMMIT_DESC: git log --format=oneline -n 1 ${CIRCLE_SHA1}
+    GIT_COMMIT_DESC: $(git log --format=oneline -n 1 ${CIRCLE_SHA1})
     SCRIPTS_FOLDER: ${CIRCLE_WORKING_DIRECTORY}/_scripts
   docker:
      - image: circleci/node:10.16.0
