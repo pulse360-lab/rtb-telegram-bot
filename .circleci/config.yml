@@ -3,6 +3,7 @@ defaults: &defaults
   environment:
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
+    GIT_COMMIT_DESC: git log --format=oneline -n 1 $CIRCLE_SHA1
     SCRIPTS_FOLDER: ${CIRCLE_WORKING_DIRECTORY}/_scripts
   docker:
      - image: circleci/node:10.16.0
@@ -108,6 +109,7 @@ jobs:
             pwd
             export
             ls
+            echo "__+_+_+_+ ${GIT_COMMIT_DESC}"
             source ${SCRIPTS_FOLDER}/increment_version.sh
             increment.version -m 10.0.130
 
