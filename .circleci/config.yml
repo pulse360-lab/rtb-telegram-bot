@@ -86,7 +86,7 @@ jobs:
                     -d text="$(echo -e ${message})" \
                     https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
             
-            elif [[ ${GIT_COMMIT_DESC} =~ ${skip_test_regex} ]]; then
+            elif [[ "${GIT_COMMIT_DESC}" =~ "${skip_test_regex}" ]]; then
               RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
               message="Test skipped by the user"
               curl -X POST \
