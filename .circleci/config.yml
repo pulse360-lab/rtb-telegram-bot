@@ -122,9 +122,9 @@ jobs:
           name: Prepare Dev Environment
           command: |
             /bin/bash ./${SCRIPTS_FOLDER}/git_setup.sh $GITHUB_EMAIL $GITHUB_USER_NAME
-            add_version=$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 VERSION))
-            echo "${add_version}" >> VERSION
-            git add VERSION
+            add_version=$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION))
+            echo "${add_version}" >> ./VERSION
+            git add ./VERSION
             git commit -m "[skip ci] new version testing"
             git push origin ${CIRCLE_BRANCH}
 
