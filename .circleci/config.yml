@@ -58,7 +58,6 @@ jobs:
             #if master or patch then dont need to turn the bot on
             if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
               RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
-              GROUP_TELEGRAM_ID=${DEV_GROUP_TELEGRAM_ID}
 
               message="I am online for about 8 minutes for testing\n"
               message+="From branch: ${CIRCLE_BRANCH}"
@@ -83,7 +82,6 @@ jobs:
                     https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
             else
               RTB_BOT_TOKEN=${RTB_BOT_TOKEN_PROD}
-              GROUP_TELEGRAM_ID=${PROD_GROUP_TELEGRAM_ID}
               
               message="Test passed on branch: ${CIRCLE_BRANCH}"
               curl -X POST \
