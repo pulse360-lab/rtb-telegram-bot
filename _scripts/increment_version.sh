@@ -47,3 +47,8 @@ increment.version() {
 
   echo "${a[0]}.${a[1]}.${a[2]}"
 }
+
+# Call the desired function
+function=$1
+shift
+$function "$@"
