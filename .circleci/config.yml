@@ -55,6 +55,7 @@ jobs:
       - run:
           name: Bot Test
           command: |
+            echo "-------------${GIT_COMMIT_DESC}"
             #the following regex represents master and patch matcches
             branch_regex='[mp][a][st][tc][eh]*'
             skip_test_regex='[\[skip test\]]'
