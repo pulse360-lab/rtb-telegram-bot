@@ -1,5 +1,5 @@
-const cities = require('./ConstantsCities');
-const httpRequest = require('./APIClients/HttpClient');
+const cities = require('../../ConstantsCities');
+const httpRequest = require('../HttpClient');
 
 const places = [{
     Id: cities.DUBLIN_ID,

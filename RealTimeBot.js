@@ -1,6 +1,4 @@
 const bluebird = require('bluebird');
-const {routeNotFoundError} = require('./Errors');
-const localization = require('./MockAPILocalization');
 
 global.Promise = bluebird;
 
@@ -9,34 +7,17 @@ const TelegramBot = require('node-telegram-bot-api'),
 
 const bot = new TelegramBot(json.authorizationToken, { polling: true }),
     INDEX_COMMAND = 1;
+
+/**
+ Start -> This is the first command used by the user to get the Localization and then he will be able to start surfing over the bot.
+ */
+bot.onText(/^\/start/, function (msg, match) {
+    require('./Commands').getLocalization(msg, bot);
+});
+
     
-    bot.onText(/\/stop (.+)/, (msg, match) => {
-    const chatId = msg.chat.id;
-    const routeNotFound = result => {
-        bot.sendMessage(chatId, `<code>${ result.message.error.message }</code>`, { parse_mode: 'HTML' });
-    }
-    
-    var test = require('./APIClients/APIFactory');
-    var id = match[INDEX_COMMAND];
-
-    var client = test.getInstance(require('./ConstantsCities').DUBLIN_ID);    
-    return client.getStopInformation(id)
-            .then(result => {
-                var routes = `Result for Stop number ${result.stopNumber} \n`;
-                routes += 'Result for Bus: \n';
-                
-                for (let i = 0; i < result.busInfo.length; i++) {
-                    routes += `Company Name: ${ result.busInfo[i].companyName } \n`;
-
-                    routes += 'Routes available: \n';
-                    for (let j = 0; j < result.busInfo[i].routes.length; j++) {
-                        routes += `${ result.busInfo[i].routes[j] } \n`;
-                    }
-                }
-
-                bot.sendMessage(chatId, '<code>' + routes + '</code>', { parse_mode: 'HTML' });
-            })
-            .catch(routeNotFoundError, routeNotFound);
+bot.onText(/\/stop (.+)/, (msg, match) => {
+    require('./Commands').getStopByNumber(msg, match, msg.location.latitude, msg.location.longitude);
 });
 
 // bot.on('callback_query', function onCallbackQuery(callbackQuery) {
@@ -114,25 +95,3 @@ var getLocation = () => {
 //     realTimeBot.sendMessage(chatId, 'Received your message');
 //   });
 
-bot.onText(/^\/hi/, function (msg, match) {
-    var option = {
-        "parse_mode": "Markdown",
-        "reply_markup": {
-            "one_time_keyboard": true,
-            "keyboard": [[{
-                text: "My Localization",
-                request_location: true
-            }], ["Cancel"]]
-        }
-    };
-    bot.sendMessage(msg.chat.id, "How can we contact you?", option).then(() => {
-        bot.once("location",(msg)=>{
-            localization.getLocalization(msg.location.latitude, msg.location.longitude).then( result => {
-                bot.sendMessage(msg.chat.id, [result.Message].join(";"));
-                   // bot.sendMessage(msg.chat.id, "We will deliver your order to " + [msg.location.longitude,msg.location.latitude].join(";"));
-            }).catch(err =>{
-                bot.sendMessage(msg.chat.id, ["There is no service available for your location yet. We do apologize"].join(";"));
-            });
-        });
-    });
-});
