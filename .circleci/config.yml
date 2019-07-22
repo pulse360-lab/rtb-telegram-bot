@@ -4,6 +4,8 @@ defaults: &defaults
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
     SCRIPTS_FOLDER: _scripts
+    GITHUB_EMAIL: rodolfotiago@gmail.com
+    GITHUB_USER_NAME: rodolfotiago
   docker:
      - image: circleci/node:10.16.0
 only-user-acceptance: &only-user-acceptance
@@ -119,6 +121,7 @@ jobs:
       - run:
           name: Prepare Dev Environment
           command: |
+            /bin/bash ./${SCRIPTS_FOLDER}/git_setup.sh $GITHUB_EMAIL $GITHUB_USER_NAME
             add_version=$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 VERSION))
             echo "add_version" >> VERSION
             git add VERSION
