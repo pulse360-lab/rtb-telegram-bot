@@ -122,10 +122,29 @@ jobs:
           name: Prepare Dev Environment
           command: |
             /bin/bash ./${SCRIPTS_FOLDER}/git_setup.sh $GITHUB_EMAIL $GITHUB_USER_NAME
-            add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION | cut -d'-' -f1))"
-            echo "${add_version}-build-${CIRCLE_BUILD_NUM}" >> ./VERSION
+            branch_regex='[mp][a][st][tc][eh]*'
+            if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
+              
+              add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION | cut -d'-' -f1))"
+              new_tag=$(echo "${add_version}-build-${CIRCLE_BUILD_NUM}")
+              commit_message="[skip ci] ${new_tag}"
+              
+            elif [[ ${CIRCLE_BRANCH} = "master" ]]; then
+              
+              add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -M $(tail -1 ./VERSION | cut -d'-' -f1))"
+              new_tag=$(echo "${add_version}-build-${CIRCLE_BUILD_NUM}")
+              commit_message="[skip ci] ${new_tag}"
+              
+            elif [[ ${CIRCLE_BRANCH} != "patch" ]]; then
+              
+              add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -p $(tail -1 ./VERSION | cut -d'-' -f1))"            
+              new_tag=$(echo "${add_version}-build-${CIRCLE_BUILD_NUM}")
+              commit_message="[skip ci] ${new_tag}"
+            fi
+            
+            echo "${new_tag}" >> ./VERSION
             git add ./VERSION
-            git commit -m "[skip ci] build-${CIRCLE_BUILD_NUM}"
+            git commit -m "${commit_message}"
             git push origin ${CIRCLE_BRANCH}
 
   prepare-uat-deploy:
