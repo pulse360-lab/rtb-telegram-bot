@@ -119,9 +119,7 @@ jobs:
       - run:
           name: Prepare Dev Environment
           command: |
-            ls ${SCRIPTS_FOLDER}
-            source ${SCRIPTS_FOLDER}/increment_version.sh
-            increment.version -m 10.0.130
+            ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m 10.0.130
 
   prepare-uat-deploy:
     <<: *defaults
