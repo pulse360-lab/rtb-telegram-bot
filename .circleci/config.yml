@@ -57,7 +57,8 @@ jobs:
           command: |
             #the following regex represents master and patch matcches
             branch_regex='[mp][a][st][tc][eh]*'
-            skip_test_regex='[skip test]'
+            skip_test_regex='[\[skip test\]]'
+            
             #if master or patch then dont need to turn the bot on
             if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
               RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
@@ -83,7 +84,8 @@ jobs:
                     -d chat_id=${GROUP_TELEGRAM_ID} \
                     -d text="$(echo -e ${message})" \
                     https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
-            elfi [[ ${GIT_COMMIT_DESC} =~ ${skip_test_regex} ]]; then
+            
+            elif [[ ${GIT_COMMIT_DESC} =~ ${skip_test_regex} ]]; then
               RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
               message="Test skipped by the user"
               curl -X POST \
