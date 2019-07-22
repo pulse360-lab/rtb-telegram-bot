@@ -132,13 +132,13 @@ jobs:
             elif [[ ${CIRCLE_BRANCH} = "master" ]]; then
               
               add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -M $(tail -1 ./VERSION | cut -d'-' -f1))"
-              new_tag=$(echo "${add_version}-build-${CIRCLE_BUILD_NUM}")
+              new_tag=$(echo "${add_version}-stable")
               commit_message="[skip ci] ${new_tag}"
               
             elif [[ ${CIRCLE_BRANCH} != "patch" ]]; then
               
               add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -p $(tail -1 ./VERSION | cut -d'-' -f1))"            
-              new_tag=$(echo "${add_version}-build-${CIRCLE_BUILD_NUM}")
+              new_tag=$(echo "${add_version}-bug-fix-build-${CIRCLE_BUILD_NUM}")
               commit_message="[skip ci] ${new_tag}"
             fi
             
