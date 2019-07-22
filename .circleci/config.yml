@@ -223,7 +223,6 @@ workflows:
           requires:
             - build-app
       - prepare-dev-deploy:
-          <<: *non-releasable
           requires:
             - test-app
       - prepare-uat-deploy:
@@ -238,9 +237,13 @@ workflows:
           requires:
             - prepare-uat-deploy
       - pre-prod:
-          <<: *only-releasable
+          type: approval
           requires:
             - test-app
+          filters:
+            branches:
+              only:
+                - patch
       - prod-promotion:
           type: approval
           requires:
