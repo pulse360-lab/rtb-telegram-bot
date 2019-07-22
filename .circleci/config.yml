@@ -110,7 +110,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "4d:ac:a1:44:a1:25:0f:7d:7e:af:ff:62:8e:76:42:c9"
+            - "4a:9e:aa:7d:48:5b:d8:23:af:af:89:e4:45:a9:7a:7c"
       - checkout
       - restore_cache:
           keys:
