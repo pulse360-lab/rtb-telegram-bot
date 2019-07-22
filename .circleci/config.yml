@@ -3,6 +3,9 @@ defaults: &defaults
   environment:
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
+    SCRIPTS_FOLDER: _scripts
+    GITHUB_EMAIL: rodolfotiago@gmail.com
+    GITHUB_USER_NAME: rodolfotiago
   docker:
      - image: circleci/node:10.16.0
 only-user-acceptance: &only-user-acceptance
@@ -53,12 +56,24 @@ jobs:
       - run:
           name: Bot Test
           command: |
+            export GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)" >> ${BASH_ENV}
+            
             #the following regex represents master and patch matcches
             branch_regex='[mp][a][st][tc][eh]*'
-            #if master or patch then dont need to turn the bot on
-            if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
+            skip_test_regex='[skip test]'
+            
+            #if skip test in the message
+            if [[ "${GIT_COMMIT_DESC}" =~ "${skip_test_regex}" ]]; then
               RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
-              GROUP_TELEGRAM_ID=${DEV_GROUP_TELEGRAM_ID}
+              message="Test skipped by the user"
+              curl -X POST \
+                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+                    
+            #if master or patch then dont need to turn the bot on
+            elif [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
+              RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
 
               message="I am online for about 8 minutes for testing\n"
               message+="From branch: ${CIRCLE_BRANCH}"
@@ -81,9 +96,9 @@ jobs:
                     -d chat_id=${GROUP_TELEGRAM_ID} \
                     -d text="$(echo -e ${message})" \
                     https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+                    
             else
               RTB_BOT_TOKEN=${RTB_BOT_TOKEN_PROD}
-              GROUP_TELEGRAM_ID=${PROD_GROUP_TELEGRAM_ID}
               
               message="Test passed on branch: ${CIRCLE_BRANCH}"
               curl -X POST \
@@ -95,6 +110,9 @@ jobs:
   prepare-dev-deploy:
     <<: *defaults
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "3f:48:1a:bc:0f:43:3e:c4:4e:2d:50:ff:b4:38:87:47"
       - checkout
       - restore_cache:
           keys:
@@ -103,7 +121,31 @@ jobs:
       - run:
           name: Prepare Dev Environment
           command: |
-            npm --verbose test || true
+            /bin/bash ./${SCRIPTS_FOLDER}/git_setup.sh $GITHUB_EMAIL $GITHUB_USER_NAME
+            branch_regex='[mp][a][st][tc][eh]*'
+            if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
+              
+              add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION | cut -d'-' -f1))"
+              new_tag=$(echo "${add_version}-build-${CIRCLE_BUILD_NUM}")
+              commit_message="[skip ci] ${new_tag}"
+              
+            elif [[ ${CIRCLE_BRANCH} = "master" ]]; then
+              
+              add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -M $(tail -1 ./VERSION | cut -d'-' -f1))"
+              new_tag=$(echo "${add_version}-stable")
+              commit_message="[skip ci] ${new_tag}"
+              
+            elif [[ ${CIRCLE_BRANCH} != "patch" ]]; then
+              
+              add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -p $(tail -1 ./VERSION | cut -d'-' -f1))"            
+              new_tag=$(echo "${add_version}-bug-fix-build-${CIRCLE_BUILD_NUM}")
+              commit_message="[skip ci] ${new_tag}"
+            fi
+            
+            echo "${new_tag}" >> ./VERSION
+            git add ./VERSION
+            git commit -m "${commit_message}"
+            git push origin ${CIRCLE_BRANCH}
 
   prepare-uat-deploy:
     <<: *defaults
@@ -181,7 +223,6 @@ workflows:
           requires:
             - build-app
       - prepare-dev-deploy:
-          <<: *non-releasable
           requires:
             - test-app
       - prepare-uat-deploy:
@@ -196,9 +237,13 @@ workflows:
           requires:
             - prepare-uat-deploy
       - pre-prod:
-          <<: *only-releasable
+          type: approval
           requires:
             - test-app
+          filters:
+            branches:
+              only:
+                - patch
       - prod-promotion:
           type: approval
           requires:

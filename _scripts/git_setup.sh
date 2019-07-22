@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#usage ./git_setup.sh <user@email>
 email=$1
 name=${email%%@*}
 
