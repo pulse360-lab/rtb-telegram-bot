@@ -123,10 +123,9 @@ jobs:
           command: |
             /bin/bash ./${SCRIPTS_FOLDER}/git_setup.sh $GITHUB_EMAIL $GITHUB_USER_NAME
             add_version=$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION))
-            echo "--______${add_version}"
             echo "0000" >> ./VERSION
             git add ./VERSION
-            git commit -m "[skip ci] new version testing"
+            git commit -m "[skip ci] build-${CIRCLE_BUILD_NUM}"
             git push origin ${CIRCLE_BRANCH}
 
   prepare-uat-deploy:
