@@ -3,6 +3,7 @@ defaults: &defaults
   environment:
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
+    SCRIPTS_FOLDER: _scripts
   docker:
      - image: circleci/node:10.16.0
 only-user-acceptance: &only-user-acceptance
@@ -93,6 +94,9 @@ jobs:
   prepare-dev-deploy:
     <<: *defaults
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "4d:ac:a1:44:a1:25:0f:7d:7e:af:ff:62:8e:76:42:c9"
       - checkout
       - restore_cache:
           keys:
