@@ -105,7 +105,8 @@ jobs:
       - run:
           name: Prepare Dev Environment
           command: |
-            npm --verbose test || true
+            source ${SCRIPTS_FOLDER}/increment_version.sh
+            increment.version -m 10.0.130
 
   prepare-uat-deploy:
     <<: *defaults
