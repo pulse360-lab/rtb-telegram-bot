@@ -3,7 +3,7 @@ defaults: &defaults
   environment:
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
-    SCRIPTS_FOLDER: _scripts
+    SCRIPTS_FOLDER: ${CIRCLE_WORKING_DIRECTORY}/_scripts
   docker:
      - image: circleci/node:10.16.0
 only-user-acceptance: &only-user-acceptance
