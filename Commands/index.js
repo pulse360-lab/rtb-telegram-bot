@@ -1,4 +1,4 @@
 module.exports ={
-    getLocalization : require('./getLocalization'),
-    getStopByNumber : require('./getStopByNumber')
+    localization : require('./getLocalization'),
+    stopNumber : require('./getStopByNumber')
 }
