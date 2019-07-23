@@ -20,6 +20,33 @@ bot.onText(/\/stop (.+)/, (msg, match) => {
     require('./Commands').stopNumber.getStopByNumber(msg, match, msg.location.latitude, msg.location.longitude);
 });
 
+
+bot.on('callback_query', (callbackQuery) => {
+    const action = callbackQuery.data;
+    var chatId = callbackQuery.message.chat.id;
+    if(action === "searchByStopNumber"){
+        bot.sendMessage(chatId, '<code>Type the command /stop [number]. For example: "/stop 123" </code>', { parse_mode: 'HTML' }).then(result =>{
+            bot.on('message', message => {
+                bot.sendMessage(chatId, 'Got a message');
+                bot.off('message');
+            });
+        });
+    }
+
+   // bot.answerCallbackQuery(msg.id, 'Ok, here ya go!', callbackQuery);
+  });
+
+
+// bot.on('message', message => {
+//     console.log('Got a message', message)
+// });
+
+bot.on('inline.query', function(message)
+{
+	// Received inline query
+    console.log(message);
+});
+
 // bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 //     const action = callbackQuery.data;
 //     const msg = callbackQuery.message;
