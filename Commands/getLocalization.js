@@ -1,4 +1,4 @@
-const localization = require('./MockAPILocalization'),
+const localization = require('../APIClients/APILocalization/MockAPILocalization'),
     localizationUI = require('../Interfaces/LocalizationUI'),
     menuUI = require('../Interfaces/MainMenuUI');
 

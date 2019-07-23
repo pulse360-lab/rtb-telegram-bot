@@ -3,7 +3,7 @@ var menu = {
     "reply_markup": {
         "one_time_keyboard": true,
         //"keyboard": [[{
-        "inline_keyboard": [[{
+        "keyboard": [[{
         text: "My Localization",
             request_location: true
         }], ["Cancel"]]
