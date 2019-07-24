@@ -1,14 +1,15 @@
 class CommandBase {
-    constructor(cmd){
-        this.cmd = cmd;
+    constructor(strCmd){
+        this.strCmd = strCmd;
     }
-    
-    match(cmd){
-        return this.cmd === cmd;
+   
+    createParam(msg){
+        return null;
     }
+
     exec(bot, param){
         return null;
     }
 }
 
-module.exports = {CommandBase};
+module.exports = CommandBase;

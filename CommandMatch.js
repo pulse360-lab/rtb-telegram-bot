@@ -1,9 +1,9 @@
-const {GetLocalization, GetStopByNumber} = require('.'),
+const {GetLocalization, GetStopByNumber} = require('./Commands'),
     cmds = [new GetLocalization(), new GetStopByNumber()];
 
 /*
     Description: Choose a proper instance accord a key is being expired.
 */
 module.exports = {
-    match : cmd => cmds.filter(f => f.cmd === cmd)[0]//.getClient(cityId) == cityId)[0]
+    cmd : strCmd => cmds.filter(f => f.strCmd === strCmd)[0]
 };

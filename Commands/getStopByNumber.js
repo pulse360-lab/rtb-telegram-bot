@@ -6,8 +6,12 @@ const routeNotFound = bot => result => {
 }
 
 class GetStopByNumber extends CommandBase{
-    constructor(bot, param){
-        super(bot, '/searchByStopNumber', param);
+    constructor(){
+        super('/searchByStopNumber');
+    }
+
+    createParam(msg){
+        
     }
 
     exec(bot, param){
@@ -39,4 +43,4 @@ class GetStopByNumber extends CommandBase{
             });
     }
 }
-module.exports = { GetStopByNumber }
+module.exports = GetStopByNumber;

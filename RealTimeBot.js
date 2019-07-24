@@ -12,16 +12,18 @@ const bot = new TelegramBot(json.authorizationToken, { polling: true }),
  Start -> This is the first command used by the user to get the Localization and then he will be able to start surfing over the bot.
  */
 bot.onText(/^\/start/, function (msg, match) {
-    require('./Commands').localization.getLocalization(msg, bot);
+    var cmd = require('./CommandMatch').cmd(msg.text);
+    cmd.exec(bot, cmd.createParam(msg));
 });
 
-bot.onText(/\/stop (.+)/, (msg, match) => {
-    require('./Commands').stopNumber.getStopByNumber(msg, match, msg.location.latitude, msg.location.longitude);
-});
+// bot.onText(/\/stop (.+)/, (msg, match) => {
+//     require('./Commands').stopNumber.getStopByNumber(msg, match, msg.location.latitude, msg.location.longitude);
+// });
 
 bot.on('callback_query', (callbackQuery) => {
     const action = callbackQuery.data;
     var chatId = callbackQuery.message.chat.id;
-    require('./Commands/CommandMatch').match(action);
+    var cmd = require('./CommandMatch').cmd(action);
+    cmd.exec(bot, cmd.createParam(callbackQuery));
 });
 
