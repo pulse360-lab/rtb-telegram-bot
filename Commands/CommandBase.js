@@ -3,10 +3,6 @@ class CommandBase {
         this.strCmd = strCmd;
     }
    
-    createParam(msg){
-        return null;
-    }
-
     exec(bot, param){
         return null;
     }

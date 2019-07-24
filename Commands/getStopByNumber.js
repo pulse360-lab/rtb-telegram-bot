@@ -1,7 +1,7 @@
 const {routeNotFoundError} = require('../Errors'),
     CommandBase = require('./CommandBase');
 
-const routeNotFound = bot => result => {
+const routeNotFound = (bot, chatId) => result => {
     return Promise.resolve(bot.sendMessage(chatId, `<code>${ result.message.error.message }</code>`, { parse_mode: 'HTML' }));
 }
 
@@ -10,19 +10,15 @@ class GetStopByNumber extends CommandBase{
         super('/searchByStopNumber');
     }
 
-    createParam(msg){
-        
-    }
-
     exec(bot, param){
-        bot.sendMessage(chatId, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' }).then(result =>{
+        bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' }).then(result =>{
             bot.on('message', message => {
                 var test = require('../APIClients/APIFactory');
                 var client = test.getInstance(require('../ConstantsCities').DUBLIN_ID);    
-                return client.getStopInformation(message.text)
+                client.getStopInformation(message.text)
                        .then(result => {
                            var routes = `Result for Stop number ${result.stopNumber} \n`;
-                           routes += 'Result for Bus: \n';
+                           routes += 'Resbult for Bus: \n';
                            
                            for (let i = 0; i < result.busInfo.length; i++) {
                                routes += `Company Name: ${ result.busInfo[i].companyName } \n`;
@@ -33,12 +29,12 @@ class GetStopByNumber extends CommandBase{
                                }
                            }
            
-                           bot.sendMessage(param.msg.chat.id, '<code>' + routes + '</code>', { parse_mode: 'HTML' });
-                           bot.sendMessage(chatId, "Choose an option:", menuUI.menu);
+                           bot.sendMessage(param.message.chat.id, '<code>' + routes + '</code>', { parse_mode: 'HTML' });
+                           let menuUI = require('../Interfaces/MainMenuUI');
+                           bot.sendMessage(param.message.chat.id, "Choose an option:", menuUI.getMenu(1, 2));
                        })
-                       .catch(routeNotFoundError, routeNotFound(bot));
+                       .catch(routeNotFoundError, routeNotFound(bot, param.message.chat.id));
                 });
-                let menuUI = require('./Interfaces/MainMenuUI');
                 bot.off('message');
             });
     }
