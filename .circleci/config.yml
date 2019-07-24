@@ -3,7 +3,9 @@ defaults: &defaults
   environment:
     PROJECT: realtime-bus
     BOT_NAME: RealTimeBot.js
-  #working_directory: ~/${PROJECT}
+    SCRIPTS_FOLDER: _scripts
+    GITHUB_EMAIL: rodolfotiago@gmail.com
+    GITHUB_USER_NAME: rodolfotiago
   docker:
      - image: circleci/node:10.16.0
 only-user-acceptance: &only-user-acceptance
@@ -54,31 +56,63 @@ jobs:
       - run:
           name: Bot Test
           command: |
-            message="I am online for about 8 minutes for testing\n"
-            message+="Start testing /stop 10"
-            curl -s \
-              -X POST \
-              -d chat_id=${GROUP_TELEGRAM_ID} \
-              -d text="$(echo -e ${message})" \
-              https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
+            export GIT_COMMIT_DESC="$(git log --format=oneline -n 1 $CIRCLE_SHA1)" >> ${BASH_ENV}
             
-            sed -i 's/${RTB_TELEGRAM_BOT_TOKEN}/'${RTB_TELEGRAM_BOT_TOKEN}/ config.json
+            #the following regex represents master and patch matcches
+            branch_regex='[mp][a][st][tc][eh]*'
+            skip_test_regex='[skip test]'
             
-            #Bot will run for 8 min for testing
-            #8 min because circleCi will automatically fail on timeout in 10 min
-            timeout 480 node ${BOT_NAME} || true
+            #if skip test in the message
+            if [[ "${GIT_COMMIT_DESC}" =~ "${skip_test_regex}" ]]; then
+              RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
+              message="Test skipped by the user"
+              curl -X POST \
+                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+                    
+            #if master or patch then dont need to turn the bot on
+            elif [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
+              RTB_BOT_TOKEN=${RTB_BOT_TOKEN_DEV}
 
-            message="I am shutting down now\n"
-            message+="Thanks for testing!"
-            message+="For testing, please run circleCi job again any time you want..."
-            curl -s \
-              -X POST \
-              -d chat_id=${GROUP_TELEGRAM_ID} \
-              -d text="$(echo -e ${message})" \
-              https://api.telegram.org/bot${RTB_TELEGRAM_BOT_TOKEN}/sendMessage
+              message="I am online for about 8 minutes for testing\n"
+              message+="From branch: ${CIRCLE_BRANCH}"
+              curl -X POST \
+                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+              
+              sed -i 's/${RTB_BOT_TOKEN}/'${RTB_BOT_TOKEN}/ config.json
+              
+              #Bot will run for 8 min for testing
+              #8 min because circleCi will automatically fail on timeout in 10 min
+              timeout 480 node ${BOT_NAME} || true
+
+              message="I am shutting down now\n"
+              message+="Thanks for testing!\n\n"
+              message+="If you want to run the same test, trigger the following url again...\n"
+              message+="https://circleci.com/gh/realtime-bus/node-telegram-bot/${CIRCLE_BUILD_NUM}"
+              curl -X POST \
+                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+                    
+            else
+              RTB_BOT_TOKEN=${RTB_BOT_TOKEN_PROD}
+              
+              message="Test passed on branch: ${CIRCLE_BRANCH}"
+              curl -X POST \
+                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+            fi
+
   prepare-dev-deploy:
     <<: *defaults
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "3f:48:1a:bc:0f:43:3e:c4:4e:2d:50:ff:b4:38:87:47"
       - checkout
       - restore_cache:
           keys:
@@ -87,8 +121,32 @@ jobs:
       - run:
           name: Prepare Dev Environment
           command: |
-            npm --verbose test || true
-
+            #/bin/bash ./${SCRIPTS_FOLDER}/git_setup.sh $GITHUB_EMAIL $GITHUB_USER_NAME
+            #branch_regex='[mp][a][st][tc][eh]*'
+            #if [[ ${CIRCLE_BRANCH} != ${branch_regex} ]]; then
+            #  
+            #  add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -m $(tail -1 ./VERSION | cut -d'-' -f1))"
+            #  new_tag=$(echo "${add_version}-build-${CIRCLE_BUILD_NUM}")
+            #  commit_message="[skip ci] ${new_tag}"
+            #  
+            #elif [[ ${CIRCLE_BRANCH} = "master" ]]; then
+            #  
+            #  add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -M $(tail -1 ./VERSION | cut -d'-' -f1))"
+            #  new_tag=$(echo "${add_version}-stable")
+            #  commit_message="[skip ci] ${new_tag}"
+            #  
+            #elif [[ ${CIRCLE_BRANCH} != "patch" ]]; then
+            #  
+            #  add_version="$(/bin/bash ./${SCRIPTS_FOLDER}/increment_version.sh increment.version -p $(tail -1 ./VERSION | cut -d'-' -f1))"            
+            #  new_tag=$(echo "${add_version}-bug-fix-build-${CIRCLE_BUILD_NUM}")
+            #  commit_message="[skip ci] ${new_tag}"
+            #fi
+            # 
+            #echo "${new_tag}" >> ./VERSION
+            #git add ./VERSION
+            #git commit -m "${commit_message}"
+            #git push origin ${CIRCLE_BRANCH}
+            echo "test"
   prepare-uat-deploy:
     <<: *defaults
     steps:
@@ -137,6 +195,8 @@ jobs:
       - run:
           name: Deploy to Pre Prod Environment
           command: |
+            RTB_BOT_TOKEN=${RTB_BOT_TOKEN_PROD}
+            GROUP_TELEGRAM_ID=${PROD_GROUP_TELEGRAM_ID}
             npm --verbose test || true
 
   prod-promotion:
@@ -150,6 +210,8 @@ jobs:
       - run:
           name: Prod Promotion
           command: |
+            RTB_BOT_TOKEN=${RTB_BOT_TOKEN_PROD}
+            GROUP_TELEGRAM_ID=${PROD_GROUP_TELEGRAM_ID}
             npm --verbose test || true
             
 workflows:
@@ -161,7 +223,6 @@ workflows:
           requires:
             - build-app
       - prepare-dev-deploy:
-          <<: *non-releasable
           requires:
             - test-app
       - prepare-uat-deploy:
@@ -176,9 +237,13 @@ workflows:
           requires:
             - prepare-uat-deploy
       - pre-prod:
-          <<: *only-releasable
+          type: approval
           requires:
             - test-app
+          filters:
+            branches:
+              only:
+                - patch
       - prod-promotion:
           type: approval
           requires:

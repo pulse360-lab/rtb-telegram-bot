@@ -1,5 +1,6 @@
 {	
-	"authorizationToken" : "755810834:AAEvgN1dQBwvchjrk4crwrxSwhayoOr7gT4",
+	"authorizationToken" : "${RTB_BOT_TOKEN}",
+  
 	"config" : {
 		"adminUsers" : [1,2,3],
 		"customCommands" : [
