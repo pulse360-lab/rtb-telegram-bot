@@ -1,32 +1,42 @@
-const {routeNotFoundError} = require('../Errors');
+const {routeNotFoundError} = require('../Errors'),
+    CommandBase = require('./CommandBase');
 
-const getStopByNumber = (msg, bot, latitude, longitude) => {
-    const chatId = msg.chat.id;
-    const routeNotFound = result => {
-        bot.sendMessage(chatId, `<code>${ result.message.error.message }</code>`, { parse_mode: 'HTML' });
-    }
-    
-    var test = require('./APIClients/APIFactory');
-    var id = match[INDEX_COMMAND];
-
-    var client = test.getInstance(require('./ConstantsCities').DUBLIN_ID);    
-    return client.getStopInformation(id)
-            .then(result => {
-                var routes = `Result for Stop number ${result.stopNumber} \n`;
-                routes += 'Result for Bus: \n';
-                
-                for (let i = 0; i < result.busInfo.length; i++) {
-                    routes += `Company Name: ${ result.busInfo[i].companyName } \n`;
-
-                    routes += 'Routes available: \n';
-                    for (let j = 0; j < result.busInfo[i].routes.length; j++) {
-                        routes += `${ result.busInfo[i].routes[j] } \n`;
-                    }
-                }
-
-                bot.sendMessage(chatId, '<code>' + routes + '</code>', { parse_mode: 'HTML' });
-            })
-            .catch(routeNotFoundError, routeNotFound);
+const routeNotFound = bot => result => {
+    return Promise.resolve(bot.sendMessage(chatId, `<code>${ result.message.error.message }</code>`, { parse_mode: 'HTML' }));
 }
 
-module.exports = { getStopByNumber }
+class GetStopByNumber extends CommandBase{
+    constructor(bot, param){
+        super(bot, '/searchByStopNumber', param);
+    }
+
+    exec(bot, param){
+        bot.sendMessage(chatId, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' }).then(result =>{
+            bot.on('message', message => {
+                var test = require('../APIClients/APIFactory');
+                var client = test.getInstance(require('../ConstantsCities').DUBLIN_ID);    
+                return client.getStopInformation(message.text)
+                       .then(result => {
+                           var routes = `Result for Stop number ${result.stopNumber} \n`;
+                           routes += 'Result for Bus: \n';
+                           
+                           for (let i = 0; i < result.busInfo.length; i++) {
+                               routes += `Company Name: ${ result.busInfo[i].companyName } \n`;
+           
+                               routes += 'Routes available: \n';
+                               for (let j = 0; j < result.busInfo[i].routes.length; j++) {
+                                   routes += `${ result.busInfo[i].routes[j] } \n`;
+                               }
+                           }
+           
+                           bot.sendMessage(param.msg.chat.id, '<code>' + routes + '</code>', { parse_mode: 'HTML' });
+                           bot.sendMessage(chatId, "Choose an option:", menuUI.menu);
+                       })
+                       .catch(routeNotFoundError, routeNotFound(bot));
+                });
+                let menuUI = require('./Interfaces/MainMenuUI');
+                bot.off('message');
+            });
+    }
+}
+module.exports = { GetStopByNumber }
