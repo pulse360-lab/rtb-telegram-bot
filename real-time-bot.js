@@ -1,6 +1,6 @@
 const bluebird = require('bluebird');
 
-const redisClient = require('./RedisClient');
+const redisClient = require('./helper/redis-client');
 redisClient.createClient();
 
 
@@ -16,8 +16,8 @@ const bot = new TelegramBot(json.authorizationToken, { polling: true })
  Start -> This is the first command used by the user to get the Localization and then he will be able to start surfing over the bot.
  */
 bot.onText(/^\/start/, (msg, match) => {
-    bot.sendMessage(msg.chat.id, `Welcome to Real Time Bus. This bot will help you to find the best route you need. Enjoy It  ${require('./Emoji').smillingFace.openMouth}`, { parse_mode: 'HTML' });
-    var cmd = require('./CommandMatch').cmd(msg.text);
+    bot.sendMessage(msg.chat.id, `Welcome to Real Time Bus. This bot will help you to find the best route you need. Enjoy It  ${require('./emoji').smillingFace.openMouth}`, { parse_mode: 'HTML' });
+    var cmd = require('./commands/command-match').cmd(msg.text);
     cmd.redis = redisClient;
     cmd.exec(bot, msg);
 });
@@ -25,7 +25,7 @@ bot.onText(/^\/start/, (msg, match) => {
 
 bot.on('callback_query', (callbackQuery) => {
     const action = callbackQuery.data;
-    var cmd = require('./CommandMatch').cmd(action);
+    var cmd = require('./commands/command-match').cmd(action);
     cmd.redis = redisClient;
     cmd.exec(bot, callbackQuery);
 });

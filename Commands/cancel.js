@@ -1,7 +1,7 @@
-const CommandBase = require('./CommandBase'),
-    menuUI = require('../Interfaces/MainMenuUI');
+const commandBase = require('./command-base'),
+    menuUI = require('../Interfaces/main-menu-ui');
 
-class CancelInLine extends CommandBase{
+class cancelInLine extends commandBase{
     constructor(){
         super('/cancelInLine');
     }
@@ -12,15 +12,15 @@ class CancelInLine extends CommandBase{
     }
 }
 
-class CancelMainOperation extends CommandBase{
+class cancelMainOperation extends commandBase{
     constructor(){
         super('/cancelMainOperation');
     }
 
     exec(bot, param){
         bot.off('message');
-        bot.sendMessage(param.message.chat.id, `Thanks for using this bot. You will be very welcome in the future. ${require('../Emoji').winkingFace}`, { parse_mode: 'HTML' });
+        bot.sendMessage(param.message.chat.id, `Thanks for using this bot. You will be very welcome in the future. ${require('../emoji').winkingFace}`, { parse_mode: 'HTML' });
     }
 }
 
-module.exports = {CancelInLine, CancelMainOperation};
+module.exports = {cancelInLine, cancelMainOperation};

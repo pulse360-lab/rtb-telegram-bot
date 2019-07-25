@@ -1,7 +1,7 @@
-class APIClientBase{
+class apiClientBase{
     constructor(client){
         this.client = client;
-        this.httpClient = require('./HttpClient');
+        this.httpClient = require('../helper/http-client');
     }
     setBaseUri(url){
         this.baseUrl = url;
@@ -20,4 +20,4 @@ class APIClientBase{
     }
 }
 
-module.exports = APIClientBase;
+module.exports = apiClientBase;

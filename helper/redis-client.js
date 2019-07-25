@@ -8,13 +8,10 @@ const createClient = () => client = redis.createClient();
 
 const get = (key) => {
    return client.getAsync(key);
-    // return client.get(key, (err, data) => {
-    //    return Promise.resolve(JSON.parse(data));
-    // });
 };
 
 const save = (key, obj) => {
-    var seconds = require('./config.json').cacheExpireTime; // TODO: put this value on config.json
+    var seconds = require('../config.json').cacheExpireTime; // TODO: put this value on config.json
     client.setex(key, seconds, JSON.stringify(obj));
 }
 

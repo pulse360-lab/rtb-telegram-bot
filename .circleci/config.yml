@@ -2,7 +2,7 @@ version: 2.1
 defaults: &defaults
   environment:
     PROJECT: realtime-bus
-    BOT_NAME: RealTimeBot.js
+    BOT_NAME: real-time-bot.js
     SCRIPTS_FOLDER: _scripts
     GITHUB_EMAIL: rodolfotiago@gmail.com
     GITHUB_USER_NAME: rodolfotiago

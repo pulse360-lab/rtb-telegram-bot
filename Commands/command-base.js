@@ -1,4 +1,4 @@
-class CommandBase {
+class commandBase {
     constructor(strCmd){
         this.strCmd = strCmd;
         this.redis = null;
@@ -9,4 +9,4 @@ class CommandBase {
     }
 }
 
-module.exports = CommandBase;
+module.exports = commandBase;

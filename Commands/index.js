@@ -1,6 +1,6 @@
 module.exports ={
-    GetLocalization : require('./GetLocalization'),
-    GetStopByNumber : require('./GetStopByNumber'),
-    CancelInLine: require('./cancel').CancelInLine,
-    CancelMainOperation: require('./cancel').CancelMainOperation
+    getLocalization : require('./get-localization'),
+    getStopByNumber : require('./get-stop-by-number'),
+    cancelInLine: require('./cancel').cancelInLine,
+    cancelMainOperation: require('./cancel').cancelMainOperation
 }
