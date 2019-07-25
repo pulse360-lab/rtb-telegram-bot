@@ -23,7 +23,6 @@ bot.onText(/^\/start/, (msg, match) => {
 
 bot.on('callback_query', (callbackQuery) => {
     const action = callbackQuery.data;
-    var t =  callbackQuery.data.split('|')[0];
     var cmd = require('./CommandMatch').cmd(action);
     cmd.exec(bot, redisClient, callbackQuery);
 });

@@ -10,7 +10,7 @@ class GetLocalization extends CommandBase{
 
     exec(bot, redis, param){
         bot.sendMessage(param.chat.id, "How can we contact you?", localizationUI.menu).then(() => {
-            bot.on("location",(msg) => {
+            bot.once("location",(msg) => {
                 localization.getLocalization(msg.location.latitude, msg.location.longitude).then( result => {
                     redis.save(`user-location:${param.from.id}`, msg.location);
                     bot.sendMessage(param.chat.id, "Choose an option:", menuUI.menu);
