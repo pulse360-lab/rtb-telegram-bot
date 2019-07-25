@@ -11,7 +11,7 @@ A Project/App/Bot for You! To help ya! get urban public transport information ar
 * Routes  
 * And more...  
 
-## Technologies  
+## Built with  
 NodeJs https://nodejs.org/en/docs/  
 Telegram Bot API https://core.telegram.org/api
 
@@ -30,7 +30,7 @@ We plan to have this project as a service as:
 ## Try it yourself  
 ### Dependencies  
 * docker  
-- image: realtimebus-bot [todo: dockerhub url]  
+--- image: realtimebus-bot [todo: dockerhub url]  
 * telegram bot token https://core.telegram.org/bots  
 
 ### Step #1  
