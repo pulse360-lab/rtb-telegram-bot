@@ -5,5 +5,16 @@
 
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/realtime-bus/node-telegram-bot)
 
-# realtime-bus-dev
-Bot used for urban public transport
+# realtime-bus  
+Project for urban public transport
+
+## Technologies  
+NodeJs https://nodejs.org/en/docs/  
+
+## APIs  
+https://eu1.locationiq.com  
+https://core.telegram.org/api
+
+## Contribute
+
+
