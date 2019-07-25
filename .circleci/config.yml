@@ -47,6 +47,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
   test-app:
     <<: *defaults
+    docker:
+      - image: circleci/node:10.16.0
+      - image: redis
     steps:
       - checkout
       - restore_cache:
