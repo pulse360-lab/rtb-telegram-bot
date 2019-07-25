@@ -24,4 +24,9 @@ We plan to have this project as a service as:
 - [x] Telegram Bot ![ongoing](https://img.shields.io/badge/on-going-yellowgreen)
 - [ ] iOS / Android App ![nextsteps](https://img.shields.io/badge/next-steps-lightgrey)
 
+## CI & CD Flow  
+[to do]  
 
+## Try it yourself  
+### Dependencies  
+[to do]  
