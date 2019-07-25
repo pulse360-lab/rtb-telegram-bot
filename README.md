@@ -21,7 +21,7 @@ https://core.telegram.org/api
 
 ## Development Plans  
 We plan to have this project as a service as:  
-- [x] Telegram Bot [![ongoing](https://img.shields.io/badge/on-going-yellowgreen)
-- [ ] iOS / Android App [![nextsteps](https://img.shields.io/badge/next-steps-lightgrey)
+- [x] Telegram Bot ![ongoing](https://img.shields.io/badge/on-going-yellowgreen)
+- [ ] iOS / Android App ![nextsteps](https://img.shields.io/badge/next-steps-lightgrey)
 
 
