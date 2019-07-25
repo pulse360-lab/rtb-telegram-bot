@@ -1,5 +1,6 @@
 {	
 	"authorizationToken" : "${RTB_BOT_TOKEN}",
+	"cacheExpireTime": "${RTB_CACHE_EXP_TIME}",
 	"config" : {
 		"adminUsers" : [1,2,3],
 		"customCommands" : [

@@ -14,7 +14,7 @@ const get = (key) => {
 };
 
 const save = (key, obj) => {
-    var seconds = 3600; // TODO: put this value on config.json
+    var seconds = require('./config.json').cacheExpireTime; // TODO: put this value on config.json
     client.setex(key, seconds, JSON.stringify(obj));
 }
 

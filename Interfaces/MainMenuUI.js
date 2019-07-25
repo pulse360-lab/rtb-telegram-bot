@@ -6,7 +6,7 @@ var menu = {
                                 [{text: 'Search By Address', callback_data: 'searchByAddress'}],
                                 [{text: 'Search By Route', callback_data: 'delete'}],
                                 [{text: 'Stops Near me', callback_data: 'delete',}],
-                                [{text: 'Cancel', callback_data: 'cancel',}]]
+                                [{text: 'Cancel', callback_data: '/cancelMainOperation',}]]
                         
         }
 };

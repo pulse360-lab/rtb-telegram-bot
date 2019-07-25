@@ -1,9 +1,9 @@
 const CommandBase = require('./CommandBase'),
     menuUI = require('../Interfaces/MainMenuUI');
 
-class Cancel extends CommandBase{
+class CancelInLine extends CommandBase{
     constructor(){
-        super('/cancel');
+        super('/cancelInLine');
     }
 
     exec(bot, redis, param){
@@ -12,4 +12,15 @@ class Cancel extends CommandBase{
     }
 }
 
-module.exports = Cancel;
+class CancelMainOperation extends CommandBase{
+    constructor(){
+        super('/cancelMainOperation');
+    }
+
+    exec(bot, redis, param){
+        bot.off('message');
+        bot.sendMessage(param.message.chat.id, `Thanks for using this bot. You will be very welcome in the future. ${require('../Emoji').winkingFace}`, { parse_mode: 'HTML' });
+    }
+}
+
+module.exports = {CancelInLine, CancelMainOperation};
