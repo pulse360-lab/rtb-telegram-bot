@@ -25,8 +25,13 @@ We plan to have this project as a service as:
 - [ ] iOS / Android App ![nextsteps](https://img.shields.io/badge/next-steps-lightgrey)
 
 ## CI & CD Flow  
-[to do]  
+[todo]  
 
 ## Try it yourself  
 ### Dependencies  
-[to do]  
+* docker  
+- image: realtimebus-bot [todo: dockerhub url]  
+* telegram bot token https://core.telegram.org/bots  
+
+### Step #1  
+[todo]  
