@@ -10,10 +10,9 @@ class GetStopByNumber extends CommandBase{
         super('/searchByStopNumber');
     }
 
-
-    onMessage(bot, redis, param){
+    onMessage(bot, param){
         bot.on('message', message => {
-            redis.get(`user-location:${param.from.id}`).then(location =>{
+            this.redis.get(`user-location:${param.from.id}`).then(location =>{
             var test = require('../APIClients/APIFactory');
             var client = test.getInstance(require('../ConstantsCities').DUBLIN_ID);    
             client.getStopInformation(message.text)
@@ -39,9 +38,9 @@ class GetStopByNumber extends CommandBase{
         });
     }
 
-    exec(bot, redis, param){
+    exec(bot, param){
         bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' }).then(result =>{
-            this.onMessage(bot, redis, param);
+            this.onMessage(bot, param);
         });
     }
 }

@@ -1,9 +1,10 @@
 class CommandBase {
     constructor(strCmd){
         this.strCmd = strCmd;
+        this.redis = null;
     }
    
-    exec(bot, redis, param){
+    exec(bot, param){
         return null;
     }
 }
