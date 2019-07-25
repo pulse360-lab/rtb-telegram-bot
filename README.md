@@ -13,6 +13,7 @@ A Project/App/Bot for You! To help ya! get urban public transport information ar
 
 ## Technologies  
 NodeJs https://nodejs.org/en/docs/  
+Telegram Bot API https://core.telegram.org/api
 
 ## APIs  
 https://eu1.locationiq.com  
@@ -20,7 +21,7 @@ https://core.telegram.org/api
 
 ## Development Plans  
 We plan to have this project as a service as:  
-[x] Telegram Bot (on going)
-[ ] iOS / Android App (next steps)
+- [x] Telegram Bot (on going)  
+- [ ] iOS / Android App (next steps)
 
 
