@@ -2,7 +2,6 @@ var menu = {
     "parse_mode": "Markdown",
     "reply_markup": {
         "one_time_keyboard": true,
-        //"keyboard": [[{
         "keyboard": [[{
         text: "My Localization",
             request_location: true
