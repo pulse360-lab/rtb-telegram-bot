@@ -30,8 +30,23 @@ We plan to have this project as a service as:
 ## Try it yourself  
 ### Dependencies  
 * docker  
---- image: realtimebus-bot [todo: dockerhub url]  
 * telegram bot token https://core.telegram.org/bots  
 
 ### Step #1  
+```
+docker run -d -e RTB_BOT_TOKEN=<YOUR_BOT_TOKEN> realtimebus-bot
+```  
+
+### Step #1  
+```
+Open Telegram and chat with your created bot sending this command /start
+```  
+### Step #3  
+```
+There is no step 3 ;) Bot is up and running for test
+```  
+
+## Contributing  
 [todo]  
+
+
