@@ -37,7 +37,7 @@ We plan to have this project as a service as:
 docker run -d -e RTB_BOT_TOKEN=<YOUR_BOT_TOKEN> realtimebus-bot
 ```  
 
-### Step #1  
+### Step #2  
 ```
 Open Telegram and chat with your created bot sending this command /start
 ```  
