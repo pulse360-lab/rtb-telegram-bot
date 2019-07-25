@@ -6,7 +6,7 @@
 [![Edit with Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/realtime-bus/node-telegram-bot)
 
 # realtime-bus  
-A Project/App/Bot for You! To help ya! get urban public transport information around you  
+A Project/App/Bot for You! To help ya! get urban public transport information around  
 * Buses Delay  
 * Routes  
 * And more...  
