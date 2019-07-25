@@ -18,6 +18,9 @@ NodeJs https://nodejs.org/en/docs/
 https://eu1.locationiq.com  
 https://core.telegram.org/api
 
-## Contribute
+## Development Plans  
+We plan to have this project as a service as:  
+[x] Telegram Bot (on going)
+[ ] iOS / Android App (next steps)
 
 
