@@ -17,22 +17,17 @@ const bot = new TelegramBot(json.authorizationToken, { polling: true })
  */
 bot.onText(/^\/start/, (msg, match) => {
     bot.sendMessage(msg.chat.id, `Welcome to Real Time Bus. This bot will help you to find the best route you need. Enjoy It  ${require('./emoji').smillingFace.openMouth}`, { parse_mode: 'HTML' });
-    var cmd = require('./commands/command-match').cmd(msg.text);
+    var cmd = require('./cmd/command-match').cmd(msg.text);
     cmd.redis = redisClient;
-    cmd.exec(bot, msg);
+    cmd.bot = bot;
+    cmd.exec(msg);
 });
 
 
 bot.on('callback_query', (callbackQuery) => {
     const action = callbackQuery.data;
-    var cmd = require('./commands/command-match').cmd(action);
+    var cmd = require('./cmd/command-match').cmd(action);
     cmd.redis = redisClient;
-    cmd.exec(bot, callbackQuery);
-});
-
-
-bot.on('inline.query', function(message)
-{
-    // Received inline query
-    console.log(message);
+    cmd.bot = bot;
+    cmd.exec(callbackQuery);
 });

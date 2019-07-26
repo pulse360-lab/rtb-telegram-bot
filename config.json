@@ -17,7 +17,7 @@
 	"apis":{
 		"geoLocalization": {
 			"url" : "https://eu1.locationiq.com/v1",
-			"token": "pk.87bc595eae2ad911f1ba5cf7d854a8de"
+			"token": "${TOKEN_LOCALIZATION}"
 		}
 	}
 }

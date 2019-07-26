@@ -1,5 +1,5 @@
 const {routeNotFoundError} = require('../helper/errors'),
-    commandBase = require('../commands/command-base');
+    commandBase = require('./command-base');
 
 const routeNotFound = (bot, chatId) => result => {
     return Promise.resolve(bot.sendMessage(chatId, `<code>${ result.message.error.message }</code>`, { parse_mode: 'HTML' }));
@@ -10,8 +10,8 @@ class getStopByNumber extends commandBase{
         super('/searchByStopNumber');
     }
 
-    onMessage(bot, param){
-        bot.on('message', message => {
+    onMessage(param){
+        this.bot.on('message', message => {
             this.redis.get(`user-location:${param.from.id}`).then(location =>{
                 // TODO : call endpoint
             // var test = require('../APIClients/APIFactory');
@@ -39,9 +39,9 @@ class getStopByNumber extends commandBase{
         });
     }
 
-    exec(bot, param){
-        bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' }).then(result =>{
-            this.onMessage(bot, param);
+    exec(param){
+        this.bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' }).then(result =>{
+            this.onMessage(param);
         });
     }
 }

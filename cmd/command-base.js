@@ -4,7 +4,7 @@ class commandBase {
         this.redis = null;
     }
    
-    exec(bot, param){
+    exec(param){
         return null;
     }
 }
