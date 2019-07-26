@@ -7,7 +7,8 @@ var client;
 const createClient = () => client = redis.createClient();
 
 const get = (key) => {
-   return client.getAsync(key);
+   return client.getAsync(key)
+                    .then(result => Promise.resolve(JSON.parse(result)));
 };
 
 const save = (key, obj) => {

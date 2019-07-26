@@ -19,7 +19,7 @@ class dublinApi extends apiBase{
                                 obj.error = {message: "Bus Stop not found"};
                                 return Promise.reject(routeNotFoundError(obj));
                             }
-                             return Promise.resolve(require('./StopInformation').mapObjectResult(result));
+                             return Promise.resolve(require('./reponses/stop-information').mapObjectResult(result));
                          });
     }
 }

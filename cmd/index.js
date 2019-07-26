@@ -2,5 +2,6 @@ module.exports ={
     getLocalization : require('./get-localization'),
     getStopByNumber : require('./get-stop-by-number'),
     cancelInLine: require('./cancel').cancelInLine,
-    cancelMainOperation: require('./cancel').cancelMainOperation
+    cancelMainOperation: require('./cancel').cancelMainOperation,
+    getRoute: require('./get-route')
 }

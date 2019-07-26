@@ -18,8 +18,12 @@ class getLocalization extends commandBase{
         return Promise.resolve(result);
     }
 
-    saveLocalizationOnCache(param, msg){
-        this.redis.save(`user-location:${param.from.id}`, msg.location);
+    saveLocalizationOnCache(param, msg, city){
+        this.redis.save(`user-location:${param.from.id}`, {
+            latitude: msg.location.latitude,
+            longitude: msg.location.longitude,
+            city: city
+        });
     }
 
     sendMenu(param){
@@ -33,9 +37,11 @@ class getLocalization extends commandBase{
     exec(param){
         this.bot.sendMessage(param.chat.id, "How can we contact you?", localizationUI.menu).then(() => {
             this.bot.once("location",(msg) => {
-                this.saveLocalizationOnCache(param, msg);
                 localization.getLocalization(msg.location.latitude, msg.location.longitude)
-                .then(result =>  this.sendMessageYourContry(param, result))
+                .then(result =>  {
+                    this.saveLocalizationOnCache(param, msg, result.address.city);
+                    return this.sendMessageYourContry(param, result)
+                })
                 .then(result => this.sendMessageAddress(param, result))
                 .then(result => this.sendMenu(param))
                 .catch(err => this.sendErrorService(param));
