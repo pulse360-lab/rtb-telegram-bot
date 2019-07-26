@@ -1,5 +1,5 @@
 {	
-	"authorizationToken" : "${RTB_BOT_TOKEN}",
+	"authorizationToken" : "742623828:AAFgaf7V-jdygzp4OOOlsj5GU3PUwTFqXV8",
 	"cacheExpireTime": "3200",
 	"config" : {
 		"adminUsers" : [1,2,3],
@@ -17,7 +17,7 @@
 	"apis":{
 		"geoLocalization": {
 			"url" : "https://eu1.locationiq.com/v1",
-			"token": "${TOKEN_LOCALIZATION}"
+			"token": "pk.87bc595eae2ad911f1ba5cf7d854a8de"
 		}
 	}
 }

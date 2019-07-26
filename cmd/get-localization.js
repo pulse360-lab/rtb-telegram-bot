@@ -18,7 +18,6 @@ class getLocalization extends commandBase{
         return Promise.resolve(result);
     }
 
-
     saveLocalizationOnCache(param, msg){
         this.redis.save(`user-location:${param.from.id}`, msg.location);
     }
