@@ -86,6 +86,7 @@ jobs:
                     https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
               
               sed -i 's/${RTB_BOT_TOKEN}/'${RTB_BOT_TOKEN}/ config.json
+              sed -i 's/${TOKEN_LOCALIZATION}/'${TOKEN_LOCALIZATION}/ config.json
               
               #Bot will run for 8 min for testing
               #8 min because circleCi will automatically fail on timeout in 10 min
