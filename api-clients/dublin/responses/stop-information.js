@@ -1,4 +1,4 @@
-let operators  = [{ shortName: "bac", completeName: 'Dublin Bus'  },{ shortName: "GAD", completeName: 'Go-Ahead Ireland'}];
+const operators = require('./operators');
 
 const mapObjectResult = result => {
      var obj = {};
@@ -9,6 +9,10 @@ const mapObjectResult = result => {
          if(result.results[0].operators){
              result.results[0].operators.forEach(operator => {
              obj.busInfo.push({
+                 params: {
+                     operator: operator.name,
+                     stopId: result.results[0].displaystopid,
+                    },
                  companyName: operators.find(f => f.shortName === operator.name) && operators.find(f => f.shortName === operator.name).completeName || "Operator name not found",
                  routes: operator.routes
                  });

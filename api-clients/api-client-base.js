@@ -11,8 +11,8 @@ class apiClientBase{
         return null;   
     }
 
-    getRealTimeInformation(id){
-
+    getRealTimeInformation(routeId, param){
+        return null;
     }
 
     getAllStop(){

@@ -1,9 +1,9 @@
-const {getLocalization, getStopByNumber, cancelInLine, cancelMainOperation, getRoute} = require('.'),
+const {getLocalization, getStopByNumber, cancelInLine, cancelMainOperation, getRouteRealTime} = require('.'),
     cmds = [new getLocalization(), 
             new getStopByNumber(), 
             new cancelInLine(), 
             new cancelMainOperation(),
-            new getRoute()];
+            new getRouteRealTime()];
 
 /*
     Description: Choose a proper instance accord of a command informed.

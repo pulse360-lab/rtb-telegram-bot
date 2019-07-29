@@ -32,7 +32,7 @@ class getStopByNumber extends commandBase{
             for (let j = 0; j < result.busInfo[i].routes.length; j++) {
                 buttoms.push({
                     text: result.busInfo[i].routes[j],
-                    callback_data: `/getRoute|${result.busInfo[i].routes[j]}`
+                    callback_data: `/getRouteRealTime|${result.busInfo[i].routes[j]}|${JSON.stringify(result.busInfo[i].params)}`
                 })
             }
        }
@@ -40,7 +40,7 @@ class getStopByNumber extends commandBase{
         let menuUI = require('../menu-ui/dynamic-menu');
 
         this.bot.sendMessage(param.message.chat.id, 'choose a route', menuUI.menu(buttoms))
-                    .then(r => this.sendMessageOptionOp(param))
+                    .then(r => this.sendMessageOptionOp(param));
     }
 
     onMessage(param){
@@ -60,6 +60,7 @@ class getStopByNumber extends commandBase{
     }
 
     exec(param){
+        this.bot.off('message');
         let arr  = param.data.split('|');   
         arr && arr.length > 1 
             ? this.get(param, arr[1])

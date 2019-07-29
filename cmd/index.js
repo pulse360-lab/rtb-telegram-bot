@@ -3,5 +3,5 @@ module.exports ={
     getStopByNumber : require('./get-stop-by-number'),
     cancelInLine: require('./cancel').cancelInLine,
     cancelMainOperation: require('./cancel').cancelMainOperation,
-    getRoute: require('./get-route')
+    getRouteRealTime: require('./get-route-realtime')
 }

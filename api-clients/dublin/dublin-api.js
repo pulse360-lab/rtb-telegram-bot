@@ -1,14 +1,10 @@
 const apiBase = require('../api-client-base');
 const {routeNotFoundError} = require('../../helper/errors');
 
-//let { stopInformationResponse }  = require('../../Contracts/');
-
-
 class dublinApi extends apiBase{
     constructor(){
         super("Dublin");
         super.setBaseUri("http://data.dublinked.ie/cgi-bin/rtpi/");
-       //https://data.dublinked.ie/cgi-bin/rtpi/realtimebusinformation?format=json&stopid=2510
     }
 
     getStopInformation(id){
@@ -19,8 +15,21 @@ class dublinApi extends apiBase{
                                 obj.error = {message: "Bus Stop not found"};
                                 return Promise.reject(routeNotFoundError(obj));
                             }
-                             return Promise.resolve(require('./reponses/stop-information').mapObjectResult(result));
+                             return Promise.resolve(require('./responses/stop-information').mapObjectResult(result));
                          });
+    }
+
+    getRealTimeInformation(routeId, param){
+        var objParameter = JSON.parse(param);
+        return this.httpClient.get(`${ this.baseUrl }realtimebusinformation?stopid=${objParameter.stopId}&routeid=${routeId}&operator=${objParameter.operator}`)
+        .then((result) => {
+           if(result.errorcode === "1"){
+               var obj = {};
+               obj.error = {message: "Bus Stop not found"};
+               return Promise.reject(routeNotFoundError(obj));
+           }
+            return Promise.resolve(require('./responses/realtime-information').mapObjectResult(result));
+        });
     }
 }
 
