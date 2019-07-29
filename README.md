@@ -34,7 +34,7 @@ We plan to have this project as a service as:
 
 ### Step #1  
 ```
-docker run -d -e RTB_BOT_TOKEN=<YOUR_BOT_TOKEN> realtimebus-bot
+docker run -d -e RTB_BOT_TOKEN=<YOUR_BOT_TOKEN> realtimebus-bot:develop
 ```  
 
 ### Step #2  
