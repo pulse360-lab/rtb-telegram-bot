@@ -16,9 +16,10 @@ class getStopByNumber extends commandBase{
         let menuUI = require('../menu-ui/cancel-menu-ui');
         return Promise.resolve(this.bot.sendMessage(param.message.chat.id, "If you want to search a new bus stop, just put the number, otherwise, click in cancel to return to the previous menu:", menuUI.menu));
     }
+    
 
     sendMessageResult(param, result){
-        var msg = `Result for Stop number ${result.stopNumber} \n`;
+        let msg = `Result for Stop number ${result.stopNumber} \n`;
       
         msg += 'Routes available: \n';
         this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' }) 
@@ -26,7 +27,7 @@ class getStopByNumber extends commandBase{
     }
 
     sendMenuListBusStop(param, result){
-        var buttoms = [];
+        let buttoms = [];
         
         for (let i = 0; i < result.busInfo.length; i++) {
             for (let j = 0; j < result.busInfo[i].routes.length; j++) {
@@ -50,8 +51,8 @@ class getStopByNumber extends commandBase{
     get(param, stopNumber){
         this.redis.get(`user-location:${param.from.id}`)
                     .then(location =>{
-                        var apiFactory = require('../api-clients/api-factory');
-                        var api = apiFactory.getInstance(location.city);
+                        let apiFactory = require('../api-clients/api-factory');
+                        let api = apiFactory.getInstance(location.city);
                         
                         return Promise.resolve(api.getStopInformation(stopNumber));
                     })

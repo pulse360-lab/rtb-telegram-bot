@@ -1,7 +1,9 @@
 module.exports ={
     getLocalization : require('./get-localization'),
     getStopByNumber : require('./get-stop-by-number'),
-    cancelInLine: require('./cancel').cancelInLine,
-    cancelMainOperation: require('./cancel').cancelMainOperation,
-    getRouteRealTime: require('./get-route-realtime')
+    backMainMenu : require('./back-main-menu'),
+    exit: require('./exit'),
+    getRouteRealTime: require('./get-route-realtime'),
+    getStopsNearMe: require('./get-stops-near-me'),
+    help: require('./help')
 }

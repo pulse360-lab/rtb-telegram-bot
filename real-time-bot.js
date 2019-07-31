@@ -25,6 +25,9 @@ bot.onText(/^\/start/, (msg, match) => {
 
 
 bot.on('callback_query', (callbackQuery) => {
+    if(!callbackQuery.chat){
+        callbackQuery.chat = callbackQuery.message.chat;
+    }
     let arr  = callbackQuery.data.split('|');
     let action = arr[0];
     let cmd = require('./cmd/command-match').cmd(action);

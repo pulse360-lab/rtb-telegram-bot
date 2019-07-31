@@ -17,8 +17,8 @@ class getRouteRealTime extends commandBase{
     }
 
     sendMessageResult(param, result){
-        var msg = `RealTime information for Route: ${param.routeId} \n`;
-        for (let index = 0; index < result.busInfo.length; index++) {
+        let msg = `RealTime information for Route: ${param.routeId} \n`;
+        for (let index = 0; index < result.busInfo.length; index ++) {
             msg += '-------------------- \n';
             msg += `Origin: ${result.busInfo[index].origin} \n`;
             msg += `Destination: ${result.busInfo[index].destination} \n`;
@@ -32,8 +32,8 @@ class getRouteRealTime extends commandBase{
     get(param){
         this.redis.get(`user-location:${param.from.id}`)
                     .then(location =>{
-                        var apiFactory = require('../api-clients/api-factory');
-                        var api = apiFactory.getInstance(location.city);
+                        let apiFactory = require('../api-clients/api-factory');
+                        let api = apiFactory.getInstance(location.city);
                         
                         return Promise.resolve(api.getRealTimeInformation(param.routeId, param.parameters));
                     })

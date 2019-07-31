@@ -37,11 +37,10 @@ class getLocalization extends commandBase{
     exec(param){
         this.bot.sendMessage(param.chat.id, "How can we contact you?", localizationUI.menu).then(() => {
             this.bot.once("location",(msg) => {
-                if(param.from.id === msg.from.id){
-                    localization.getLocalization(msg.location.latitude, msg.location.longitude)
+                localization.getLocalization(msg.location.latitude, msg.location.longitude)
                     .then(result =>  {
-                        var apiFactory = require('../api-clients/api-factory');
-                        var api = apiFactory.getInstance(result.address.city);
+                        let apiFactory = require('../api-clients/api-factory');
+                        let api = apiFactory.getInstance(result.address.city);
                         if(!api){
                             return Promise.reject(param);
                         }
@@ -52,12 +51,6 @@ class getLocalization extends commandBase{
                     .then(result => this.sendMessageAddress(param, result))
                     .then(result => this.sendMenu(param))
                     .catch(err => this.sendErrorService(param));
-                }
-               else{
-                   console.log('incorrect address');
-                   console.log(param);
-                   console.log(msg);
-               }
             });
         });
     }
