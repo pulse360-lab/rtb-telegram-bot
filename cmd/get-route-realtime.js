@@ -17,11 +17,12 @@ class getRouteRealTime extends commandBase{
     }
 
     sendMessageResult(param, result){
-        var msg = 'RealTime information for Route: \n';
+        var msg = `RealTime information for Route: ${param.routeId} \n`;
         for (let index = 0; index < result.busInfo.length; index++) {
+            msg += '-------------------- \n';
             msg += `Origin: ${result.busInfo[index].origin} \n`;
             msg += `Destination: ${result.busInfo[index].destination} \n`;
-            msg += `Due time: ${result.busInfo[index].duetime} \n`;
+            msg += `Due time in ${result.busInfo[index].duetime} \n`;
             
         }
 

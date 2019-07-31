@@ -25,7 +25,7 @@ class dublinApi extends apiBase{
         .then((result) => {
            if(result.errorcode === "1"){
                var obj = {};
-               obj.error = {message: "Bus Stop not found"};
+               obj.error = {message: result.errormessage};
                return Promise.reject(routeNotFoundError(obj));
            }
             return Promise.resolve(require('./responses/realtime-information').mapObjectResult(result));
