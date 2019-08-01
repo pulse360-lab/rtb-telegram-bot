@@ -80,10 +80,10 @@ jobs:
 
               message="I am online for about 8 minutes for testing\n"
               message+="From branch: ${CIRCLE_BRANCH}"
-              #curl -X POST \
-              #      -d chat_id=${GROUP_TELEGRAM_ID} \
-              #      -d text="$(echo -e ${message})" \
-              #      https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+              curl -X POST \
+                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
               
               sed -i 's/${RTB_BOT_TOKEN}/'${RTB_BOT_TOKEN}/ config.json
               sed -i 's/${TOKEN_LOCALIZATION}/'${TOKEN_LOCALIZATION}/ config.json
