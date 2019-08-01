@@ -16,10 +16,10 @@ class getLocalization extends commandBase{
         await this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../emoji').party.three}`)
     }
 
-    async saveLocalizationOnCache(param, msg, city){
+    async saveLocalizationOnCache(param, city){
         await this.redis.save(`user-location:${param.from.id}`, {
-            latitude: msg.location.latitude,
-            longitude: msg.location.longitude,
+            latitude: param.location.latitude,
+            longitude: param.location.longitude,
             city: city
         });
     }
@@ -33,13 +33,16 @@ class getLocalization extends commandBase{
     }
 
     async exec(param){
+        this.bot.off("location");
+
         await this.bot.sendMessage(param.chat.id, "How can we contact you?", localizationUI.menu);
-        await this.bot.once("location", async (msg) => {
+        await this.bot.on("location", async (msg) => {
+
             let result = await localization.getLocalization(msg.location.latitude, msg.location.longitude);
-            await this.saveLocalizationOnCache(param, msg, result.address.city);
-            await this.sendMessageYourContry(param, result);
-            await this.sendMessageAddress(param, result);
-            await this.sendMenu(param);
+            await this.saveLocalizationOnCache(msg, result.address.city);
+            await this.sendMessageYourContry(msg, result);
+            await this.sendMessageAddress(msg, result);
+            await this.sendMenu(msg);
         });
     }
 }
