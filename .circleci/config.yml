@@ -56,7 +56,7 @@ jobs:
       #    keys:
       #    - v1-dependencies-{{ checksum "package.json" }}
       #    - v1-dependencies-
-      - run: redis-cli ping
+      - run: redis-server
       - run:
           name: Bot Test
           command: |
