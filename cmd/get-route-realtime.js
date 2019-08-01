@@ -1,5 +1,5 @@
 const commandBase = require('./command-base');
-const {routeNotFoundError} = require('../helper/errors');
+//const {routeNotFoundError} = require('../helper/errors');
 
 class getRouteRealTime extends commandBase{
     constructor(){
@@ -38,7 +38,7 @@ class getRouteRealTime extends commandBase{
                         return Promise.resolve(api.getRealTimeInformation(param.routeId, param.parameters));
                     })
                     .then(result => this.sendMessageResult(param, result))
-                    .catch(routeNotFoundError, result => this.routeNotFound(param, result));
+                 //   .catch(routeNotFoundError, result => this.routeNotFound(param, result));
     }
 
     exec(param){

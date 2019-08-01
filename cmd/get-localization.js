@@ -8,50 +8,38 @@ class getLocalization extends commandBase{
         super('/start');
     }
 
-    sendMessageYourContry(param, result) {
-        this.bot.sendMessage(param.chat.id, `You are in ${result.address.country}`)
-        return Promise.resolve(result);
+    async sendMessageYourContry(param, result) {
+        await this.bot.sendMessage(param.chat.id, `You are in ${result.address.country}`)
     }
 
-    sendMessageAddress (param, result) {
-        this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../emoji').party.three}`)
-        return Promise.resolve(result);
+    async sendMessageAddress (param, result) {
+        await this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../emoji').party.three}`)
     }
 
-    saveLocalizationOnCache(param, msg, city){
-        this.redis.save(`user-location:${param.from.id}`, {
+    async saveLocalizationOnCache(param, msg, city){
+        await this.redis.save(`user-location:${param.from.id}`, {
             latitude: msg.location.latitude,
             longitude: msg.location.longitude,
             city: city
         });
     }
 
-    sendMenu(param){
-        this.bot.sendMessage(param.chat.id, "Choose an option:", menuUI.menu);
+    async sendMenu(param){
+        await this.bot.sendMessage(param.chat.id, "Choose an option:", menuUI.menu);
     }
 
-    sendErrorService(param){
-        this.bot.sendMessage(param.chat.id, ["There is no service available for your location yet. We do apologize"].join(";"));
+    async sendErrorService(param){
+        await this.bot.sendMessage(param.chat.id, ["There is no service available for your location yet. We do apologize"].join(";"));
     }
 
-    exec(param){
-        this.bot.sendMessage(param.chat.id, "How can we contact you?", localizationUI.menu).then(() => {
-            this.bot.once("location",(msg) => {
-                localization.getLocalization(msg.location.latitude, msg.location.longitude)
-                    .then(result =>  {
-                        let apiFactory = require('../api-clients/api-factory');
-                        let api = apiFactory.getInstance(result.address.city);
-                        if(!api){
-                            return Promise.reject(param);
-                        }
-
-                        this.saveLocalizationOnCache(param, msg, result.address.city);
-                        return this.sendMessageYourContry(param, result)
-                    })
-                    .then(result => this.sendMessageAddress(param, result))
-                    .then(result => this.sendMenu(param))
-                    .catch(err => this.sendErrorService(param));
-            });
+    async exec(param){
+        await this.bot.sendMessage(param.chat.id, "How can we contact you?", localizationUI.menu);
+        await this.bot.once("location", async (msg) => {
+            let result = await localization.getLocalization(msg.location.latitude, msg.location.longitude);
+            await this.saveLocalizationOnCache(param, msg, result.address.city);
+            await this.sendMessageYourContry(param, result);
+            await this.sendMessageAddress(param, result);
+            await this.sendMenu(param);
         });
     }
 }

@@ -1,5 +1,4 @@
 const apiBase = require('../api-client-base');
-const {routeNotFoundError} = require('../../helper/errors');
 
 class dublinApi extends apiBase{
     constructor(){
@@ -7,29 +6,21 @@ class dublinApi extends apiBase{
         super.setBaseUri("http://data.dublinked.ie/cgi-bin/rtpi/");
     }
 
-    getStopInformation(id){
-        return this.httpClient.get(`${ this.baseUrl }busstopinformation?stopid=${id}&format=json`)
-                         .then((result) => {
-                            if(result.errorcode == "1"){
-                                var obj = {};
-                                obj.error = {message: "Bus Stop not found"};
-                                return Promise.reject(routeNotFoundError(obj));
-                            }
-                             return Promise.resolve(require('./responses/stop-information').mapObjectResult(result));
-                         });
+    async getStopInformation(id){
+        let result = await this.httpClient.get(`${ this.baseUrl }busstopinformation?stopid=${id}&format=json`);
+
+        return result.errorcode === "1" 
+                                ? {error: {message: result.errormessage}} 
+                                : require('./responses/stop-information').mapObjectResult(result);
     }
 
-    getRealTimeInformation(routeId, param){
-        var objParameter = JSON.parse(param);
-        return this.httpClient.get(`${ this.baseUrl }realtimebusinformation?stopid=${objParameter.stopId}&routeid=${routeId}&operator=${objParameter.operator}`)
-        .then((result) => {
-           if(result.errorcode === "1"){
-               var obj = {};
-               obj.error = {message: result.errormessage};
-               return Promise.reject(routeNotFoundError(obj));
-           }
-            return Promise.resolve(require('./responses/realtime-information').mapObjectResult(result));
-        });
+    async getRealTimeInformation(routeId, param){
+        let objParameter = JSON.parse(param);
+        let result = await this.httpClient.get(`${ this.baseUrl }realtimebusinformation?stopid=${objParameter.stopId}&routeid=${routeId}&operator=${objParameter.operator}`);
+
+        return result.errorcode === "1" 
+                                ? {error: {message: result.errormessage}} 
+                                : require('./responses/realtime-information').mapObjectResult(result);
     }
 
     getStopsNearMe(param){

@@ -1,5 +1,4 @@
-const {routeNotFoundError} = require('../helper/errors'),
-    commandBase = require('./command-base');
+const commandBase = require('./command-base');
 
 
 
@@ -57,7 +56,7 @@ class getStopByNumber extends commandBase{
                         return Promise.resolve(api.getStopInformation(stopNumber));
                     })
                     .then(result => this.sendMessageResult(param, result))
-                    .catch(routeNotFoundError, result => this.routeNotFound(param, result));
+                   // .catch(routeNotFoundError, result => this.routeNotFound(param, result));
     }
 
     exec(param){
