@@ -101,9 +101,7 @@ jobs:
               npm install bluebird child_process node-telegram-bot-api redis request request-promise
               echo "ping"
               redis-cli ping
-              npm install --save request
-              npm install --save request-promise-native
-              timeout 480 node ${BOT_NAME} || true
+              NODE_DEBUG=cluster,net,http,fs,tls,module,timers timeout 480 node ${BOT_NAME} || true
 
               message="I am shutting down now\n"
               message+="Thanks for testing!\n\n"
