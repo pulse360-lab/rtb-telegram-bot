@@ -58,10 +58,10 @@ jobs:
       - run:
         name: Update apt
         command: apt-get update
-    - run:
+      - run:
         name: Install base packages
         command: apt-get install -y redis-server
-    - run:
+      - run:
         name: Start Redis
         command: redis-server --daemonize yes
       - run:
