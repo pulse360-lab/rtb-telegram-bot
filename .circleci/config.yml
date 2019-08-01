@@ -48,7 +48,6 @@ jobs:
   test-app:
     <<: *defaults
     docker:
-      - image: circleci/redis:4.0.9
       - image: circleci/node:10.16.0
     steps:
       - checkout
@@ -56,7 +55,15 @@ jobs:
       #    keys:
       #    - v1-dependencies-{{ checksum "package.json" }}
       #    - v1-dependencies-
-      - run: redis-server --daemonize yes
+      - run:
+        name: Update apt
+        command: apt-get update
+    - run:
+        name: Install base packages
+        command: apt-get install -y redis-server
+    - run:
+        name: Start Redis
+        command: redis-server --daemonize yes
       - run:
           name: Bot Test
           command: |
