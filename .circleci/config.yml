@@ -32,10 +32,10 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      #- restore_cache:
-      #    keys:
-      #    - v1-dependencies-{{ checksum "package.json" }}
-      #    - v1-dependencies-
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
       - run:
           name: Build Project
           command: |
@@ -49,21 +49,13 @@ jobs:
     <<: *defaults
     docker:
       - image: circleci/node:10.16.0
+      - image: circleci/redis
     steps:
       - checkout
-      #- restore_cache:
-      #    keys:
-      #    - v1-dependencies-{{ checksum "package.json" }}
-      #    - v1-dependencies-
-      - run:
-          name: Update apt
-          command: sudo apt-get update
-      - run:
-          name: Install base packages
-          command: sudo apt-get install -y redis-server
-      - run:
-          name: Start Redis
-          command: redis-server --daemonize yes
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
       - run:
           name: Bot Test
           command: |
@@ -88,19 +80,16 @@ jobs:
 
               message="I am online for about 8 minutes for testing\n"
               message+="From branch: ${CIRCLE_BRANCH}"
-              #curl -X POST \
-              #      -d chat_id=${GROUP_TELEGRAM_ID} \
-              #      -d text="$(echo -e ${message})" \
-              #      https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
+              curl -X POST \
+                    -d chat_id=${GROUP_TELEGRAM_ID} \
+                    -d text="$(echo -e ${message})" \
+                    https://api.telegram.org/bot${RTB_BOT_TOKEN}/sendMessage
               
               sed -i 's/${RTB_BOT_TOKEN}/'${RTB_BOT_TOKEN}/ config.json
               sed -i 's/${TOKEN_LOCALIZATION}/'${TOKEN_LOCALIZATION}/ config.json
               
               #Bot will run for 8 min for testing
               #8 min because circleCi will automatically fail on timeout in 10 min
-              npm install bluebird child_process node-telegram-bot-api redis request request-promise
-              echo "ping"
-              redis-cli ping
               timeout 480 node ${BOT_NAME} || true
 
               message="I am shutting down now\n"

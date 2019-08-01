@@ -13,7 +13,7 @@ class getLocalization extends commandBase{
     }
 
     async sendMessageAddress (param, result) {
-        await this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../emoji').party.three}`)
+        await this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../Emoji.js').party.three}`)
     }
 
     async saveLocalizationOnCache(param, city){
