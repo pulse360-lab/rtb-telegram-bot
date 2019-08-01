@@ -19,8 +19,8 @@
   "dependencies": {
     "bluebird": "^3.5.5",
     "child_process": "^1.0.2",
-    "error-factory": "^0.1.6",
     "node-telegram-bot-api": "^0.30.0",
+    "redis": "^2.8.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   }
