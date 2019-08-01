@@ -48,8 +48,8 @@ jobs:
   test-app:
     <<: *defaults
     docker:
-      #- image: circleci/node:10.16.0
       - image: circleci/redis:4.0.9
+      - image: circleci/node:10.16.0
     steps:
       - checkout
       #- restore_cache:
