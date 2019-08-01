@@ -57,10 +57,10 @@ jobs:
       #    - v1-dependencies-
       - run:
           name: Update apt
-          command: apt-get update
+          command: sudo apt-get update
       - run:
           name: Install base packages
-          command: apt-get install -y redis-server
+          command: sudo apt-get install -y redis-server
       - run:
           name: Start Redis
           command: redis-server --daemonize yes
