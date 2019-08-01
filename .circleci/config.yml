@@ -56,14 +56,14 @@ jobs:
       #    - v1-dependencies-{{ checksum "package.json" }}
       #    - v1-dependencies-
       - run:
-        name: Update apt
-        command: apt-get update
+          name: Update apt
+          command: apt-get update
       - run:
-        name: Install base packages
-        command: apt-get install -y redis-server
+          name: Install base packages
+          command: apt-get install -y redis-server
       - run:
-        name: Start Redis
-        command: redis-server --daemonize yes
+          name: Start Redis
+          command: redis-server --daemonize yes
       - run:
           name: Bot Test
           command: |
