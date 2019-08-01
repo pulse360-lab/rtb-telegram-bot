@@ -6,14 +6,14 @@ class getStopsNearMe extends commandBase{
         super('/getStopsNearMe');
     }
 
-    exec(param){
+    async exec(param){
         let arr  = param.data.split('|');
         var json = JSON.parse(arr[1]);
         if(json.param.askUpdateLocate){
-            this.bot.sendMessage(param.message.chat.id, "Before bring stops near you, would you like to update your address?", menuUI.menu);
+            await this.bot.sendMessage(param.message.chat.id, "Before bring stops near you, would you like to update your address?", menuUI.menu);
         }
         else{
-            this.bot.sendMessage(param.message.chat.id, "ok, lets take stops near you");
+            await this.bot.sendMessage(param.message.chat.id, "ok, lets take stops near you");
         }
     }
 }

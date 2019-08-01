@@ -7,25 +7,25 @@ class getStopByNumber extends commandBase{
         super('/searchByStopNumber');
     }
 
-    routeNotFound (param, result){
-        this.bot.sendMessage(param.message.chat.id, `<code>${ result.message.error.message }</code>`, { parse_mode: 'HTML' })
-                    .then(result => this.sendMessageOptionOp(param))
+    async routeNotFound (param, result){
+        await this.bot.sendMessage(param.message.chat.id, `<code>${ result.message.error.message }</code>`, { parse_mode: 'HTML' });
+        await this.sendMessageOptionOp(param);
     }
-    sendMessageOptionOp(param){
+    async sendMessageOptionOp(param){
         let menuUI = require('../menu-ui/cancel-menu-ui');
-        return Promise.resolve(this.bot.sendMessage(param.message.chat.id, "If you want to search a new bus stop, just put the number, otherwise, click in cancel to return to the previous menu:", menuUI.menu));
+        await this.bot.sendMessage(param.message.chat.id, "If you want to search a new bus stop, just put the number, otherwise, click in cancel to return to the previous menu:", menuUI.menu);
     }
     
 
-    sendMessageResult(param, result){
+    async sendMessageResult(param, result){
         let msg = `Result for Stop number ${result.stopNumber} \n`;
       
         msg += 'Routes available: \n';
-        this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' }) 
-                .then(r => this.sendMenuListBusStop(param, result))
+        await this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' });
+        await this.sendMenuListBusStop(param, result);
     }
 
-    sendMenuListBusStop(param, result){
+    async sendMenuListBusStop(param, result){
         let buttoms = [];
         
         for (let i = 0; i < result.busInfo.length; i++) {
@@ -39,33 +39,31 @@ class getStopByNumber extends commandBase{
 
         let menuUI = require('../menu-ui/dynamic-menu');
 
-        this.bot.sendMessage(param.message.chat.id, 'choose a route', menuUI.menu(buttoms))
-                    .then(r => this.sendMessageOptionOp(param));
+        await this.bot.sendMessage(param.message.chat.id, 'choose a route', menuUI.menu(buttoms));
+        await this.sendMessageOptionOp(param);
     }
 
-    onMessage(param){
-        this.bot.on('message', message => this.get(param, message.text));
+    async onMessage(param){
+        await this.bot.on('message', message => this.get(param, message.text));
     }
 
-    get(param, stopNumber){
-        this.redis.get(`user-location:${param.from.id}`)
-                    .then(location =>{
-                        let apiFactory = require('../api-clients/api-factory');
-                        let api = apiFactory.getInstance(location.city);
-                        
-                        return Promise.resolve(api.getStopInformation(stopNumber));
-                    })
-                    .then(result => this.sendMessageResult(param, result))
-                   // .catch(routeNotFoundError, result => this.routeNotFound(param, result));
+    async get(param, stopNumber){
+        let location = await this.redis.get(`user-location:${param.from.id}`)
+        let apiFactory = require('../api-clients/api-factory');
+        let api = apiFactory.getInstance(location.city);
+        let result = await api.getStopInformation(stopNumber);                     
+        await this.sendMessageResult(param, result);
     }
 
-    exec(param){
+    async exec(param){
         this.bot.off('message');
         let arr  = param.data.split('|');   
-        arr && arr.length > 1 
-            ? this.get(param, arr[1])
-            : this.bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' })
-                        .then(result => this.onMessage(param));
+        if(arr && arr.length > 1)
+            await this.get(param, arr[1])
+        else{
+             await this.bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' })
+             await this.onMessage(param);
+        }
     }
 }
 module.exports = getStopByNumber;
