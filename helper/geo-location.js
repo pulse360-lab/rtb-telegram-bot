@@ -84,7 +84,7 @@ var GeoLocation = GeoLocation ? GeoLocation : {
     
   }
 
-  const get = (latitude, longitude) => GeoLocation.buildLocationRange(latitude, longitude, 1.1)
+  const get = (latitude, longitude, boundaryInMiles) => GeoLocation.buildLocationRange(latitude, longitude, boundaryInMiles)
   
 
   module.exports = {get};

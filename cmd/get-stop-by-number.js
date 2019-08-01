@@ -1,7 +1,5 @@
 const commandBase = require('./command-base');
 
-
-
 class getStopByNumber extends commandBase{
     constructor(){
         super('/searchByStopNumber');
@@ -39,7 +37,7 @@ class getStopByNumber extends commandBase{
 
         let menuUI = require('../menu-ui/dynamic-menu');
 
-        await this.bot.sendMessage(param.message.chat.id, 'choose a route', menuUI.menu(buttoms));
+        await this.bot.sendMessage(param.message.chat.id, 'choose a route', menuUI.menu([buttoms]));
         await this.sendMessageOptionOp(param);
     }
 

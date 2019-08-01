@@ -24,7 +24,13 @@ class dublinApi extends apiBase{
     }
 
     getStopsNearMe(param){
-        
+        var result = require('../../helper/geo-location').get(param.latitude, param.longitude, 0.3);
+        var stops = [];
+        require('./route-list.json').forEach(f => {
+            if(f.latitude >= result.minLat && f.latitude <= result.maxLat && f.longitude >= result.minLon && f.longitude <= result.maxLon)
+                stops.push({stopId: f.stopid, name: f.fullname});
+        });
+        return stops;
     }
 }
 

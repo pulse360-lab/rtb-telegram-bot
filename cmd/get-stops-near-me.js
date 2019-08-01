@@ -13,7 +13,23 @@ class getStopsNearMe extends commandBase{
             await this.bot.sendMessage(param.message.chat.id, "Before bring stops near you, would you like to update your address?", menuUI.menu);
         }
         else{
-            await this.bot.sendMessage(param.message.chat.id, "ok, lets take stops near you");
+            let location = await this.redis.get(`user-location:${param.from.id}`)
+            let apiFactory = require('../api-clients/api-factory');
+            let api = apiFactory.getInstance(location.city);
+            let result = await api.getStopsNearMe({latitude: location.latitude, longitude: location.longitude});
+            
+            let msg = `Bus stops available near your location: \n`;
+
+            var buttons = [];
+            for (let i = 0; i < result.length; i++) {
+                buttons.push([{
+                    text: `${result[i].stopId} - ${result[i].name}`,
+                    callback_data: `/searchByStopNumber|${result[i].stopId}`
+                }]);
+            }
+    
+            await this.bot.sendMessage(param.message.chat.id, msg, require('../menu-ui/dynamic-menu').menu(buttons)) ;
+            
         }
     }
 }
