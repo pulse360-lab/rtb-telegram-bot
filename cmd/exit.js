@@ -8,7 +8,7 @@ class exit extends commandBase{
 
     exec(param){
         this.bot.off('message');
-        this.bot.sendMessage(param.message.chat.id, `Thanks for using this bot. You will be very welcome in the future. ${require('../Emoji.js').winkingFace}`, { parse_mode: 'HTML' });
+        this.bot.sendMessage(param.message.chat.id, `Thanks for using this bot. You will be very welcome in the future. ${require('../emoji.js').winkingFace}`, { parse_mode: 'HTML' });
     }
 }
 
