@@ -15,6 +15,10 @@ class apiClientBase{
         return null;
     }
 
+    getStopsNearMe(param){
+        return null;
+    }
+
     getAllStop(){
         
     }

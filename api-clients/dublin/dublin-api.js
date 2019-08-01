@@ -31,6 +31,10 @@ class dublinApi extends apiBase{
             return Promise.resolve(require('./responses/realtime-information').mapObjectResult(result));
         });
     }
+
+    getStopsNearMe(param){
+        
+    }
 }
 
 module.exports = dublinApi;
