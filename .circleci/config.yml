@@ -90,6 +90,8 @@ jobs:
               
               #Bot will run for 8 min for testing
               #8 min because circleCi will automatically fail on timeout in 10 min
+              redis-server &
+              sleep 5
               npm install bluebird child_process node-telegram-bot-api redis request request-promise
               timeout 480 node ${BOT_NAME} || true
 
