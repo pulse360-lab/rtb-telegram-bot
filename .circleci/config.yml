@@ -56,7 +56,7 @@ jobs:
       #    keys:
       #    - v1-dependencies-{{ checksum "package.json" }}
       #    - v1-dependencies-
-      - run: redis-server
+      - run: redis-server --daemonize yes
       - run:
           name: Bot Test
           command: |
