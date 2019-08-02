@@ -14,14 +14,18 @@
 		],
 		"deniedCommands" : ["rm", "rmdir", "shutdown", "halt", "sudo", "mv", "touch", "chmod", "wget", "curl", "echo"]
 	},
-	"apis":{
-		"geoLocalization": {
-			"url" : "https://eu1.locationiq.com/v1",
-			"token": "${TOKEN_LOCALIZATION}"
+	"apis": [
+		{
+			"geoLocalization": {
+				"url" : "https://eu1.locationiq.com/v1",
+				"token": "${TOKEN_LOCALIZATION}"
+			}
 		}
-		"sptrans": {
-			"url" : "http://api.olhovivo.sptrans.com.br/v2.1",
-			"token": "088be3cd3fa9af6d82e16952f02e90e4cd726feebd0d00c0d4d3d132ca42880d"
+		{
+			"sptrans": {
+				"url" : "http://api.olhovivo.sptrans.com.br/v2.1",
+				"token": "088be3cd3fa9af6d82e16952f02e90e4cd726feebd0d00c0d4d3d132ca42880d"
+			}
 		}
 	}
 }
