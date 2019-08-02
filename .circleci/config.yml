@@ -95,7 +95,7 @@ jobs:
               message="I am shutting down now\n"
               message+="Thanks for testing!\n\n"
               message+="If you want to run the same test, trigger the following url again...\n"
-              message+="https://circleci.com/gh/realtime-bus/node-telegram-bot/${CIRCLE_BUILD_NUM}"
+              message+="https://circleci.com/gh/pulse360-lab/rtb-telegram-bot/${CIRCLE_BUILD_NUM}"
               curl -X POST \
                     -d chat_id=${GROUP_TELEGRAM_ID} \
                     -d text="$(echo -e ${message})" \
