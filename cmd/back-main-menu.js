@@ -5,9 +5,14 @@ class backMainMenu extends commandBase{
         super('/backMainMenu');
     }
 
-    exec(param){
-        this.bot.off('message');
-        this.bot.sendMessage(param.message.chat.id, "Choose an option:", require('../menu-ui/main-menu-ui').menu);
+    async exec(param){
+        await this.bot.off('message');
+
+        await this.bot.editMessageText("Choose an option:", {
+            chat_id: param.message.chat.id,
+            message_id: param.message.message_id,
+            reply_markup: require('../menu-ui/main-menu-ui').menu.reply_markup
+        });
     }
 }
 

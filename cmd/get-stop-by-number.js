@@ -15,12 +15,18 @@ class getStopByNumber extends commandBase{
     }
     
 
-    async sendMessageResult(param, result){
+    async sendMessageResult(param, result, msgId){
         let msg = `Result for Stop number ${result.stopNumber} \n`;
       
         msg += 'Routes available: \n';
-        await this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' });
-        await this.sendMenuListBusStop(param, result);
+        await this.bot.editMessageText(msg, {
+            chat_id: param.message.chat.id,
+            message_id: msgId,
+            reply_markup: menuUI.menu(JSON.parse(param.parameters).stopId).reply_markup
+        });
+
+        // await this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' });
+        // await this.sendMenuListBusStop(param, result);
     }
 
     async sendMenuListBusStop(param, result){
@@ -45,22 +51,27 @@ class getStopByNumber extends commandBase{
         await this.bot.on('message', message => this.get(param, message.text));
     }
 
-    async get(param, stopNumber){
+    async get(param, stopNumber, ){
         let location = await this.redis.get(`user-location:${param.from.id}`)
         let apiFactory = require('../api-clients/api-factory');
         let api = apiFactory.getInstance(location.city);
         let result = await api.getStopInformation(stopNumber);                     
-        await this.sendMessageResult(param, result);
+        await this.sendMessageResult(param, result, msgId);
     }
 
     async exec(param){
         this.bot.off('message');
-        let arr  = param.data.split('|');   
-        if(arr && arr.length > 1)
-            await this.get(param, arr[1])
+        let arr  = param.data.split('|');
+        var json = JSON.parse(arr[1]);
+        if(json.param.typeText)
+            await this.get(param, arr[1], json.param.msgId)
         else{
-             await this.bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' })
-             await this.onMessage(param);
+            await this.bot.editMessageText('Type the bus stop number or click on the button to back to the main menu!', {
+                chat_id: param.message.chat.id,
+                message_id: param.message.message_id,
+                reply_markup: require('../menu-ui/back-main-menu-ui').menu(param.message.message_id).reply_markup
+            });
+            await this.onMessage(param);
         }
     }
 }

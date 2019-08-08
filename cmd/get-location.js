@@ -1,19 +1,18 @@
 const localization = require('../api-localization/geo-localization'),
-    localizationUI = require('../menu-ui/localization-ui'),
-    menuUI = require('../menu-ui/main-menu-ui'),
+    localizationUI = require('../menu-ui/location-ui'),
     commandBase = require('./command-base');
 
 class getLocalization extends commandBase{
     constructor(){
-        super('/start');
+        super('/getLocation');
     }
 
-    async sendMessageYourContry(param, result) {
-        await this.bot.sendMessage(param.chat.id, `You are in ${result.address.country}`)
-    }
+    async sendMessage(param, result) {
+        let msg = `You are in ${result.address.country}\n`;
+        msg += `Your current location is: ${result.display_name}. There are services available ${require('../emoji.js').party.three}\n`;
+        msg += "Choose an option:\n";
 
-    async sendMessageAddress (param, result) {
-        await this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../emoji.js').party.three}`)
+        await this.bot.sendMessage(param.chat.id, msg, require('../menu-ui/main-menu-ui').menu(param.message_id, true));
     }
 
     async saveLocalizationOnCache(param, city){
@@ -22,10 +21,6 @@ class getLocalization extends commandBase{
             longitude: param.location.longitude,
             city: city
         });
-    }
-
-    async sendMenu(param){
-        await this.bot.sendMessage(param.chat.id, "Choose an option:", menuUI.menu);
     }
 
     async sendErrorService(param){
@@ -37,12 +32,9 @@ class getLocalization extends commandBase{
 
         await this.bot.sendMessage(param.chat.id, "How can we contact you?", localizationUI.menu);
         await this.bot.on("location", async (msg) => {
-
+            await this.bot.deleteMessage(msg.chat.id, msg.message_id);
             let result = await localization.getLocalization(msg.location.latitude, msg.location.longitude);
-            await this.saveLocalizationOnCache(msg, result.address.city);
-            await this.sendMessageYourContry(msg, result);
-            await this.sendMessageAddress(msg, result);
-            await this.sendMenu(msg);
+            await this.sendMessage(msg, result);
         });
     }
 }

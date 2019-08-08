@@ -6,9 +6,12 @@ class exit extends commandBase{
         super('/exit');
     }
 
-    exec(param){
-        this.bot.off('message');
-        this.bot.sendMessage(param.message.chat.id, `Thanks for using this bot. You will be very welcome in the future. ${require('../emoji.js').winkingFace}`, { parse_mode: 'HTML' });
+    async exec(param){
+        await this.bot.off('message');
+        await this.bot.editMessageText(`Thanks for using this bot. You will be very welcome in the future. ${require('../emoji.js').winkingFace}`, {
+            chat_id: param.message.chat.id,
+            message_id: param.message.message_id
+        });
     }
 }
 

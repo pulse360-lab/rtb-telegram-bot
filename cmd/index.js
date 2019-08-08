@@ -1,5 +1,5 @@
 module.exports ={
-    getLocalization : require('./get-localization'),
+    getLocation : require('./get-location'),
     getStopByNumber : require('./get-stop-by-number'),
     backMainMenu : require('./back-main-menu'),
     exit: require('./exit'),
