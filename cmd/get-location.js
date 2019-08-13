@@ -12,7 +12,10 @@ class getLocalization extends commandBase{
         msg += `Your current location is: ${result.display_name}. There are services available ${require('../emoji.js').party.three}\n`;
         msg += "Choose an option:\n";
 
-        await this.bot.sendMessage(param.chat.id, msg, require('../menu-ui/main-menu-ui').menu(param.message_id, true));
+        await this.bot.sendMessage(param.chat.id, msg, require('../menu-ui/main-menu-ui').menu(param.message_id, {
+            msgId : param.message_id, 
+            typeText : true
+        }));
     }
 
     async saveLocalizationOnCache(param, city){
@@ -34,6 +37,7 @@ class getLocalization extends commandBase{
         await this.bot.on("location", async (msg) => {
             await this.bot.deleteMessage(msg.chat.id, msg.message_id);
             let result = await localization.getLocalization(msg.location.latitude, msg.location.longitude);
+            await this.saveLocalizationOnCache(msg, result.address.city);
             await this.sendMessage(msg, result);
         });
     }

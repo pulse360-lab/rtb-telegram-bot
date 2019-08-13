@@ -1,9 +1,9 @@
-var menu = (msgId, typeText) =>{
+var menu = (msgId, param) =>{
   return {
         "parse_mode": "Markdown",
         "reply_markup": {
             "one_time_keyboard": true,
-            "inline_keyboard":  [[{text: 'Search By Stop Number', callback_data: `/searchByStopNumber|{"param":{"msgId" : ${msgId}, "typeText" : ${typeText}}`}],
+            "inline_keyboard":  [[{text: 'Search By Stop Number', callback_data: `/searchByStopNumber|{"param":${JSON.stringify(param)}}`}],
                                 // [{text: 'Search By Address', callback_data: 'searchByAddress'}],
                                 // [{text: 'Search By Route', callback_data: 'delete'}],
                                 [{text: 'Stops Near me', callback_data: '/getStopsNearMe|{"param":{"askUpdateLocate" : true}}'}],

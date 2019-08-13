@@ -16,42 +16,40 @@ class getStopByNumber extends commandBase{
     
 
     async sendMessageResult(param, result, msgId){
+        let menuUI = require('../menu-ui/dynamic-menu');
+
         let msg = `Result for Stop number ${result.stopNumber} \n`;
+        
+        var par = {param: {
+            msgId: msgId
+           }}
       
         msg += 'Routes available: \n';
-        await this.bot.editMessageText(msg, {
-            chat_id: param.message.chat.id,
-            message_id: msgId,
-            reply_markup: menuUI.menu(JSON.parse(param.parameters).stopId).reply_markup
-        });
-
-        // await this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' });
-        // await this.sendMenuListBusStop(param, result);
+        await this.bot.sendMessage(param.message.chat.id, msg, menuUI.menu([this.createMsgRoutes(param, result), 
+            [{text: '<< Back to the Main Menu', callback_data: `/backMainMenu| ${JSON.stringify(par)}`}]]
+        ));
     }
 
-    async sendMenuListBusStop(param, result){
-        let buttoms = [];
+    createMsgRoutes(param, result, msgId){
+        let buttons = [];
         
         for (let i = 0; i < result.busInfo.length; i++) {
             for (let j = 0; j < result.busInfo[i].routes.length; j++) {
-                buttoms.push({
+                buttons.push({
                     text: result.busInfo[i].routes[j],
                     callback_data: `/getRouteRealTime|${result.busInfo[i].routes[j]}|${JSON.stringify(result.busInfo[i].params)}`
-                })
+                });
             }
        }
 
-        let menuUI = require('../menu-ui/dynamic-menu');
-
-        await this.bot.sendMessage(param.message.chat.id, 'choose a route', menuUI.menu([buttoms]));
-        await this.sendMessageOptionOp(param);
+       return buttons;
     }
 
     async onMessage(param){
-        await this.bot.on('message', message => this.get(param, message.text));
+        await this.bot.on('message', message => this.get(param, message.text, message.message_id));
     }
 
-    async get(param, stopNumber, ){
+    async get(param, stopNumber, msgId){
         let location = await this.redis.get(`user-location:${param.from.id}`)
         let apiFactory = require('../api-clients/api-factory');
         let api = apiFactory.getInstance(location.city);
@@ -63,15 +61,18 @@ class getStopByNumber extends commandBase{
         this.bot.off('message');
         let arr  = param.data.split('|');
         var json = JSON.parse(arr[1]);
-        if(json.param.typeText)
-            await this.get(param, arr[1], json.param.msgId)
-        else{
+        if(json.param.typeText){
             await this.bot.editMessageText('Type the bus stop number or click on the button to back to the main menu!', {
                 chat_id: param.message.chat.id,
                 message_id: param.message.message_id,
-                reply_markup: require('../menu-ui/back-main-menu-ui').menu(param.message.message_id).reply_markup
+                reply_markup: require('../menu-ui/back-main-menu-ui').menu({
+                        msgId:  param.message.message_id
+                    }).reply_markup
             });
             await this.onMessage(param);
+        }
+        else{
+            await this.get(param, arr[1], json.param.msgId)
         }
     }
 }
