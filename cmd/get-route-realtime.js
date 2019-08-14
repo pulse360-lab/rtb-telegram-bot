@@ -45,7 +45,8 @@ class getRouteRealTime extends commandBase{
         let arr  = param.data.split('|');   
         if(arr && arr.length > 1){
             param.routeId = arr[1];
-            param.parameters = arr[2];
+            param.msgId = arr[2];
+            param.parameters = arr[3];
             await this.get(param);
         }
     }

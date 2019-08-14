@@ -5,20 +5,12 @@ class backMainMenu extends commandBase{
         super('/backMainMenu');
     }
 
-    async exec(param){
+    async exec(input){
         await this.bot.off('message');
+        var obj = require('../helper/callback-pattern').extract(input);
 
-        let arr  = param.data.split('|');
-        var json = JSON.parse(arr[1]);
-
-        await this.bot.editMessageText("Choose an option:", {
-            chat_id: param.message.chat.id,
-            message_id: json.param.msgId,
-            reply_markup: require('../menu-ui/main-menu-ui').menu(json.param.msgId, {
-                "msgId" : json.param.msgId, 
-                "typeText" : true
-            }).reply_markup
-        });
+        var message = require('../helper/messages');
+        await message.editMessageMainMenu(this.bot, input, obj);
     }
 }
 

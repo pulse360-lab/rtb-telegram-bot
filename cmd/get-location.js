@@ -7,18 +7,13 @@ class getLocalization extends commandBase{
         super('/getLocation');
     }
 
+    //Send MessagerId = 0 because I am creating a new message rather than edit Message.
     async sendMessage(param, result) {
-        let msg = `You are in ${result.address.country}\n`;
-        msg += `Your current location is: ${result.display_name}. There are services available ${require('../emoji.js').party.three}\n`;
-        msg += "Choose an option:\n";
-
-        await this.bot.sendMessage(param.chat.id, msg, require('../menu-ui/main-menu-ui').menu(param.message_id, {
-            msgId : param.message_id, 
-            typeText : true
-        }));
+        var message = require('../helper/messages');
+        await message.sendMessageMainMenu(this.bot, param, result);
     }
 
-    async saveLocalizationOnCache(param, city){
+    async saveLocationOnCache(param, city){
         await this.redis.save(`user-location:${param.from.id}`, {
             latitude: param.location.latitude,
             longitude: param.location.longitude,
@@ -37,7 +32,7 @@ class getLocalization extends commandBase{
         await this.bot.on("location", async (msg) => {
             await this.bot.deleteMessage(msg.chat.id, msg.message_id);
             let result = await localization.getLocalization(msg.location.latitude, msg.location.longitude);
-            await this.saveLocalizationOnCache(msg, result.address.city);
+            await this.saveLocationOnCache(msg, result.address.city);
             await this.sendMessage(msg, result);
         });
     }

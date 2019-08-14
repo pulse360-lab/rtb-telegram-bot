@@ -1,9 +1,14 @@
+const callbackPattern = require('../helper/callback-pattern');
+
+
 var menu = (msgId, param) =>{
   return {
         "parse_mode": "Markdown",
         "reply_markup": {
             "one_time_keyboard": true,
-            "inline_keyboard":  [[{text: 'Search By Stop Number', callback_data: `/searchByStopNumber|{"param":${JSON.stringify(param)}}`}],
+            "inline_keyboard":  [[{text: 'Search By Stop Number', 
+                                  callback_data: callbackPattern.set('/searchByStopNumber', msgId, param)
+                                }],
                                 // [{text: 'Search By Address', callback_data: 'searchByAddress'}],
                                 // [{text: 'Search By Route', callback_data: 'delete'}],
                                 [{text: 'Stops Near me', callback_data: '/getStopsNearMe|{"param":{"askUpdateLocate" : true}}'}],

@@ -20,24 +20,21 @@ class getStopByNumber extends commandBase{
 
         let msg = `Result for Stop number ${result.stopNumber} \n`;
         
-        var par = {param: {
-            msgId: msgId
-           }}
-      
         msg += 'Routes available: \n';
-        await this.bot.sendMessage(param.message.chat.id, msg, menuUI.menu([this.createMsgRoutes(param, result), 
-            [{text: '<< Back to the Main Menu', callback_data: `/backMainMenu| ${JSON.stringify(par)}`}]]
+        await this.bot.sendMessage(param.message.chat.id, msg, menuUI.menu([this.createMsgRoutes(msgId, result), 
+            [{text: '<< Back to the Main Menu', callback_data: `/backMainMenu|}`}]]
         ));
     }
 
-    createMsgRoutes(param, result, msgId){
+
+    createMsgRoutes(msgId, result){
         let buttons = [];
         
         for (let i = 0; i < result.busInfo.length; i++) {
             for (let j = 0; j < result.busInfo[i].routes.length; j++) {
                 buttons.push({
                     text: result.busInfo[i].routes[j],
-                    callback_data: `/getRouteRealTime|${result.busInfo[i].routes[j]}|${JSON.stringify(result.busInfo[i].params)}`
+                    callback_data: `/getRouteRealTime|${result.busInfo[i].routes[j]}|${msgId}|${result.busInfo[i].params}`
                 });
             }
        }
@@ -57,22 +54,21 @@ class getStopByNumber extends commandBase{
         await this.sendMessageResult(param, result, msgId);
     }
 
-    async exec(param){
+    async exec(input){
+        var obj = require('../helper/callback-pattern').extract(input);
+
         this.bot.off('message');
-        let arr  = param.data.split('|');
-        var json = JSON.parse(arr[1]);
-        if(json.param.typeText){
+    
+        if(obj.parameters.typeText){
             await this.bot.editMessageText('Type the bus stop number or click on the button to back to the main menu!', {
-                chat_id: param.message.chat.id,
-                message_id: param.message.message_id,
-                reply_markup: require('../menu-ui/back-main-menu-ui').menu({
-                        msgId:  param.message.message_id
-                    }).reply_markup
+                chat_id: input.message.chat.id,
+                message_id: obj.msgId,
+                reply_markup: require('../menu-ui/back-main-menu-ui').menu(obj.msgId, null).reply_markup
             });
-            await this.onMessage(param);
+            await this.onMessage(input);
         }
         else{
-            await this.get(param, arr[1], json.param.msgId)
+            await this.get(input, obj.parameters.stopNumber, obj.msgId)
         }
     }
 }
