@@ -1,5 +1,7 @@
 const commandBase = require('./command-base'),
-    menuUI = require('../menu-ui/menu-update-address-ui');
+    menuUI = require('../menu-ui/menu-update-address-ui'),
+    apiClient = require('../api/api-client');
+
 
 class getStopsNearMe extends commandBase{
     constructor(){
@@ -13,10 +15,10 @@ class getStopsNearMe extends commandBase{
             await this.bot.sendMessage(param.message.chat.id, "Before bring stops near you, would you like to update your address?", menuUI.menu);
         }
         else{
-            let location = await this.redis.get(`user-location:${param.from.id}`)
-            let apiFactory = require('../api-clients/api-factory');
-            let api = apiFactory.getInstance(location.city);
-            let result = await api.getStopsNearMe({latitude: location.latitude, longitude: location.longitude});
+            let result = await apiClient.getStopsNearMe({
+                userId: param.from.id
+            });                     
+            //let result = await api.getStopsNearMe({latitude: location.latitude, longitude: location.longitude});
             
             let msg = `Bus stops available near your location: \n`;
 

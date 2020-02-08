@@ -1,4 +1,5 @@
 const commandBase = require('./command-base');
+apiClient = require('../api/api-client');
 
 class getStopByNumber extends commandBase{
     constructor(){
@@ -46,10 +47,10 @@ class getStopByNumber extends commandBase{
     }
 
     async get(param, stopNumber){
-        let location = await this.redis.get(`user-location:${param.from.id}`)
-        let apiFactory = require('../api-clients/api-factory');
-        let api = apiFactory.getInstance(location.city);
-        let result = await api.getStopInformation(stopNumber);                     
+        let result = await apiClient.getStopInformation({
+            userId: param.from.id, 
+            stopNumber: stopNumber
+        });              
         await this.sendMessageResult(param, result);
     }
 

@@ -1,4 +1,5 @@
-const commandBase = require('./command-base');
+const commandBase = require('./command-base'),
+apiClient = require('../api/api-client');
 //const {routeNotFoundError} = require('../helper/errors');
 
 class getRouteRealTime extends commandBase{
@@ -29,11 +30,13 @@ class getRouteRealTime extends commandBase{
         await this.sendMessageOptionOp(param, result);
     }
     async get(param){
-        let location = await this.redis.get(`user-location:${param.from.id}`);
-        let apiFactory = require('../api-clients/api-factory');
-        let api = apiFactory.getInstance(location.city);
-                        
-        let result = await api.getRealTimeInformation(param.routeId, param.parameters);
+        let objParameter = JSON.parse(param.parameters);
+        let result = await apiClient.getRealTimeInfo({
+            userId: param.from.id, 
+            stopNumber: objParameter.stopId, 
+            routeId: param.routeId, 
+            operator: objParameter.operator 
+        });
         await this.sendMessageResult(param, result);
     }
 
