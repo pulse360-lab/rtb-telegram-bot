@@ -1,6 +1,5 @@
 {	
-	"authorizationToken" : "${RTB_BOT_TOKEN}",
-	"cacheExpireTime": "3200",
+	"authorizationToken" : "660911305:AAHlZ1sk3RPWquAEBSsR6SUWayaR2sgMZzE",
 	"config" : {
 		"adminUsers" : [1,2,3],
 		"customCommands" : [
@@ -14,10 +13,7 @@
 		],
 		"deniedCommands" : ["rm", "rmdir", "shutdown", "halt", "sudo", "mv", "touch", "chmod", "wget", "curl", "echo"]
 	},
-	"apis":{
-		"geoLocalization": {
-			"url" : "https://eu1.locationiq.com/v1",
-			"token": "${TOKEN_LOCALIZATION}"
-		}
+	"api":{
+			"uri" : "http://localhost:3000/"
 	}
 }
