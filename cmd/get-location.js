@@ -5,7 +5,7 @@ const apiClient = require('../api/api-client'),
 
 class getLocation extends commandBase{
     constructor(){
-        super('/start');
+        super('/getLocale');
     }
 
     async sendMessageYourContry(param, result) {

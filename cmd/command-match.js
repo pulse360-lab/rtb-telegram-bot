@@ -1,5 +1,6 @@
-const { getLocation, getStopByNumber, backMainMenu, exit, getRouteRealTime, getStopsNearMe, help } = require('.'),
-    cmds = [new getLocation(), 
+const { languageCmd, getLocation, getStopByNumber, backMainMenu, exit, getRouteRealTime, getStopsNearMe, help } = require('.'),
+    cmds = [new languageCmd(),
+            new getLocation(), 
             new getStopByNumber(), 
             new backMainMenu(), 
             new exit(),

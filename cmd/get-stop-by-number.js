@@ -17,11 +17,9 @@ class getStopByNumber extends commandBase{
     
 
     async sendMessageResult(param, result){
-        let msg = `Result for Stop number ${result.stopNumber} \n`;
-      
-        msg += 'Routes available: \n';
-        await this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' });
-        await this.sendMenuListBusStop(param, result);
+        result.error
+            ? await this.bot.sendMessage(param.message.chat.id, `<code>${ result.error.message }</code>`, { parse_mode: 'HTML' })
+            : await this.sendMenuListBusStop(param, result);
     }
 
     async sendMenuListBusStop(param, result){
@@ -38,7 +36,7 @@ class getStopByNumber extends commandBase{
 
         let menuUI = require('../menu-ui/dynamic-menu');
 
-        await this.bot.sendMessage(param.message.chat.id, 'choose a route', menuUI.menu([buttoms]));
+        await this.bot.sendMessage(param.message.chat.id, 'Routes available:', menuUI.menu([buttoms]));
         await this.sendMessageOptionOp(param);
     }
 
