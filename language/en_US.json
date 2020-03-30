@@ -1,0 +1,8 @@
+{
+    "howContactYou": "How can we contact you?",
+    "myLocation": "My location",
+    "cancel": "Cancel",
+    "serviceUnavailable": "There is no service available for your location yet. We do apologize",
+    "chooseAnOption" : "Choose an option:",
+    "currentLocation": "Your current location is: #display_name#. There are services available #emoji#"
+}

@@ -27,5 +27,6 @@ bot.on('callback_query', (callbackQuery) => {
     let action = arr[0];
     let cmd = require('./cmd/command-match').cmd(action);
     cmd.bot = bot;
+    cmd.config(JSON.parse(arr[1]).param);
     cmd.exec(callbackQuery);
 });

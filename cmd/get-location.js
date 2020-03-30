@@ -3,31 +3,34 @@ const apiClient = require('../api/api-client'),
     menuUI = require('../menu-ui/main-menu-ui'),
     commandBase = require('./command-base');
 
+const emoji = require('../emoji.js');
+
 class getLocation extends commandBase{
     constructor(){
         super('/getLocale');
     }
 
-    async sendMessageYourContry(param, result) {
-        await this.bot.sendMessage(param.chat.id, `You are in ${result.address.country}`)
-    }
-
     async sendMessageAddress (param, result) {
-        await this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../emoji.js').party.three}`)
+        // await this.bot.sendMessage(param.chat.id, `Your current location is: ${result.display_name}. There are services available ${require('../emoji.js').party.three}`)
+        let msg = this.language.currentLocation;
+        msg = msg.replace('#display_name#', result.display_name);
+        msg = msg.replace('#emoji#', emoji.party.three);
+
+        await this.bot.sendMessage(param.chat.id, msg);
     }
 
     async sendMenu(param){
-        await this.bot.sendMessage(param.chat.id, "Choose an option:", menuUI.menu);
+        await this.bot.sendMessage(param.chat.id, this.language.chooseAnOption, menuUI.menu);
     }
 
     async sendErrorService(param){
-        await this.bot.sendMessage(param.chat.id, ["There is no service available for your location yet. We do apologize"].join(";"));
+        await this.bot.sendMessage(param.chat.id, [this.language.serviceUnavailable].join(";"));
     }
 
     async exec(param){
         this.bot.off("location");
 
-        await this.bot.sendMessage(param.chat.id, "How can we contact you?", locationUI.menu);
+        await this.bot.sendMessage(param.chat.id, this.language.howContactYou , locationUI.menu(this.language));
         await this.bot.on("location", async (msg) => {
 
             let result = await apiClient.getLocale({
@@ -35,7 +38,6 @@ class getLocation extends commandBase{
                 latitude: msg.location.latitude, 
                 longitude: msg.location.longitude
             });
-            await this.sendMessageYourContry(msg, result);
             await this.sendMessageAddress(msg, result);
             await this.sendMenu(msg);
         });
