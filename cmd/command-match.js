@@ -1,12 +1,13 @@
-const { languageCmd, getLocation, getStopByNumber, backMainMenu, exit, getRouteRealTime, getStopsNearMe, help } = require('.'),
-    cmds = [new languageCmd(),
-            new getLocation(), 
-            new getStopByNumber(), 
-            new backMainMenu(), 
-            new exit(),
-            new getRouteRealTime(),
-            new getStopsNearMe(),
-            new help()];
+const { languageCommand, getLocationCommand, getStopByNumberCommand, backMainMenuCommand, 
+    exitCommand, getRouteRealTimeCommand, getStopsNearMeCommand, helpCommand } = require('.'),
+    cmds = [new languageCommand(),
+            new getLocationCommand(), 
+            new getStopByNumberCommand(), 
+            new backMainMenuCommand(), 
+            new exitCommand(),
+            new getRouteRealTimeCommand(),
+            new getStopsNearMeCommand(),
+            new helpCommand()];
 
 /*
     Description: Choose a proper instance accord of a command informed.

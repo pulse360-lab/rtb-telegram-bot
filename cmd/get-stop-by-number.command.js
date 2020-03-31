@@ -1,7 +1,8 @@
 const commandBase = require('./command-base');
 apiClient = require('../api/api-client');
+let backMenu = require('../menu-ui/back-menu-ui');
 
-class getStopByNumber extends commandBase{
+class getStopByNumberCommand extends commandBase{
     constructor(){
         super('/searchByStopNumber');
     }
@@ -11,11 +12,10 @@ class getStopByNumber extends commandBase{
         await this.sendMessageOptionOp(param);
     }
     async sendMessageOptionOp(param){
-        let menuUI = require('../menu-ui/cancel-menu-ui');
-        await this.bot.sendMessage(param.message.chat.id, "If you want to search a new bus stop, just put the number, otherwise, click in cancel to return to the previous menu:", menuUI.menu);
+        let menu = backMenu.menu(this.language);
+        await this.bot.sendMessage(param.message.chat.id, this.language.newroteMsg, menu);
     }
     
-
     async sendMessageResult(param, result){
         result.error
             ? await this.bot.sendMessage(param.message.chat.id, `<code>${ result.error.message }</code>`, { parse_mode: 'HTML' })
@@ -36,7 +36,7 @@ class getStopByNumber extends commandBase{
 
         let menuUI = require('../menu-ui/dynamic-menu');
 
-        await this.bot.sendMessage(param.message.chat.id, 'Routes available:', menuUI.menu([buttoms]));
+        await this.bot.sendMessage(param.message.chat.id, this.language.routerAvailable + ':', menuUI.menu([buttoms]));
         await this.sendMessageOptionOp(param);
     }
 
@@ -58,9 +58,9 @@ class getStopByNumber extends commandBase{
         if(arr && arr.length > 1)
             await this.get(param, arr[1])
         else{
-             await this.bot.sendMessage(param.message.chat.id, '<code>Type the bus stop number: </code>', { parse_mode: 'HTML' })
+             await this.bot.sendMessage(param.message.chat.id, `<code>${this.language.typeBusStopNumber}: </code>`, { parse_mode: 'HTML' })
              await this.onMessage(param);
         }
     }
 }
-module.exports = getStopByNumber;
+module.exports = getStopByNumberCommand;

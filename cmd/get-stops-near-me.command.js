@@ -3,7 +3,7 @@ const commandBase = require('./command-base'),
     apiClient = require('../api/api-client');
 
 
-class getStopsNearMe extends commandBase{
+class getStopsNearMeCommand extends commandBase{
     constructor(){
         super('/getStopsNearMe');
     }
@@ -12,15 +12,15 @@ class getStopsNearMe extends commandBase{
         let arr  = param.data.split('|');
         var json = JSON.parse(arr[1]);
         if(json.param.askUpdateLocate){
-            await this.bot.sendMessage(param.message.chat.id, "Before bring stops near you, would you like to update your address?", menuUI.menu);
+            let menu = menuUI.menu(this.language);
+            await this.bot.sendMessage(param.message.chat.id, this.language.askUpdateLocale, menu);
         }
         else{
             let result = await apiClient.getStopsNearMe({
                 userId: param.from.id
             });                     
-            //let result = await api.getStopsNearMe({latitude: location.latitude, longitude: location.longitude});
             
-            let msg = `Bus stops available near your location: \n`;
+            let msg = `${this.language.busStopAvailableNearMe}: \n`;
 
             var buttons = [];
             for (let i = 0; i < result.length; i++) {
@@ -35,4 +35,4 @@ class getStopsNearMe extends commandBase{
         }
     }
 }
-module.exports = getStopsNearMe;
+module.exports = getStopsNearMeCommand;

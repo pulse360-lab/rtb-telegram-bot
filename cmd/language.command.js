@@ -1,9 +1,9 @@
 const commandBase = require('./command-base');
 const menuLanguage = require('../menu-ui/language.ui');
 
-class languageCmd extends commandBase {
+class languageCommand extends commandBase {
     constructor(){
-        super('/start');
+        super('/language');
     }
 
     async exec(param){
@@ -11,4 +11,4 @@ class languageCmd extends commandBase {
     }
 }
 
-module.exports = languageCmd;
+module.exports = languageCommand;

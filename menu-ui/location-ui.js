@@ -1,5 +1,5 @@
-var menu = (language) =>{ 
-    return {
+const menu = (language) => {
+    return { 
     "parse_mode": "Markdown",
     "reply_markup": {
         "one_time_keyboard": true,
@@ -7,8 +7,8 @@ var menu = (language) =>{
         text: language.myLocation,
             request_location: true
         }], [language.cancel]]
+        }
     }
-}
 };
 
-module.exports =  { menu } ;
+module.exports =  { menu };
