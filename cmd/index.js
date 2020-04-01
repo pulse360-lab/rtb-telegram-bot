@@ -1,5 +1,4 @@
 module.exports = {
-    languageCommand: require('./language.command'),
     getLocationCommand : require('./get-location.command'),
     getStopByNumberCommand : require('./get-stop-by-number.command'),
     backMainMenuCommand : require('./back-main-menu.command'),

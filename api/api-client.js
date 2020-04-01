@@ -1,21 +1,27 @@
 const httpClient = require('./http-client'),
 config = require('../config.json')
 
-const getLocale = async(param) =>
-    await httpClient.get(`${ config.api.uri }locale?userId=${param.userId}&latitude=${param.latitude}&longitude=${param.longitude}`);
+const getLocale = async(param) =>{
+    let apiParam = `?userId=${param.userId}&language=${param.language}&latitude=${param.latitude}&longitude=${param.longitude}`
+    let result = await httpClient.get(`${ config.api.uri }locale${apiParam}`);
+    return result;
+}
 
 const getRealTimeInfo = async(param) => {
-    let result = await httpClient.get(`${ config.api.uri }realtime/info?userId=${param.userId}&stopNumber=${param.stopNumber}&routeId=${param.routeId}&operator=${param.operator}`);
+    let apiParam  = `?userId=${param.userId}&language=${param.language}&stopNumber=${param.stopNumber}&routeId=${param.routeId}&operator=${param.operator}`;
+    let result = await httpClient.get(`${ config.api.uri }realtime/info${apiParam}`);
     return result;
 }
 
 const getStopInformation = async(param) => {
-    let result = await httpClient.get(`${ config.api.uri }realtime/bystop?userId=${param.userId}&stopNumber=${param.stopNumber}`);
+    let result = await httpClient.get(`${ config.api.uri }realtime/bystop?userId=${param.userId}&language=${param.language}&stopNumber=${param.stopNumber}`);
     return result;
 }
 
-const getStopsNearMe = async(param) =>
-    await httpClient.get(`${ config.api.uri }realtime/stopnear?userId=${param.userId}`);
+const getStopsNearMe = async(param) =>{
+    let result = await httpClient.get(`${ config.api.uri }realtime/stopnear?userId=${param.userId}&language=${param.language}`);
+    return result;
+}
 
 
 module.exports = { getLocale, getRealTimeInfo, getStopInformation, getStopsNearMe };

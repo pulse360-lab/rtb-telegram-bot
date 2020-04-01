@@ -12,15 +12,16 @@ class getStopsNearMeCommand extends commandBase{
         let arr  = param.data.split('|');
         var json = JSON.parse(arr[1]);
         if(json.param.askUpdateLocate){
-            let menu = menuUI.menu(this.language);
-            await this.bot.sendMessage(param.message.chat.id, this.language.askUpdateLocale, menu);
+            let menu = menuUI.menu(this.resource);
+            await this.bot.sendMessage(param.message.chat.id, this.resource.askUpdateLocale, menu);
         }
         else{
             let result = await apiClient.getStopsNearMe({
-                userId: param.from.id
+            language: this.language,
+            userId: param.from.id
             });                     
             
-            let msg = `${this.language.busStopAvailableNearMe}: \n`;
+            let msg = `${this.resource.busStopAvailableNearMe}: \n`;
 
             var buttons = [];
             for (let i = 0; i < result.length; i++) {

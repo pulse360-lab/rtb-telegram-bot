@@ -1,4 +1,5 @@
-const resource = require('../language/resource');
+const resource = require('../language/resource')
+
 
 class commandBase {
     constructor(strCmd){
@@ -10,7 +11,8 @@ class commandBase {
     }
 
     setLanguage(language){
-        this.language = resource.getResource(language);
+        this.language = language;
+        this.resource = resource.getResource(language);
     }
 }
 

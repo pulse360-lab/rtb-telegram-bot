@@ -11,26 +11,27 @@ class getLocationCommand extends commandBase{
     }
 
     async sendMessage (param, result) {
-        let msg = this.language.currentLocation;
+        let msg = this.resource.currentLocation;
         msg = msg.replace('#display_name#', result.display_name);
         msg = msg.replace('#emoji#', emoji.party.three);
         msg += '\n';
-        msg+= this.language.chooseAnOption;
+        msg+= this.resource.chooseAnOption;
 
-        let menu = mainMenuUI.menu(this.language);
+        let menu = mainMenuUI.menu(this.resource);
         await this.bot.sendMessage(param.chat.id, msg, menu);
     }
 
     async sendErrorService(param){
-        await this.bot.sendMessage(param.chat.id, [this.language.serviceUnavailable].join(";"));
+        await this.bot.sendMessage(param.chat.id, [this.resource.serviceUnavailable].join(";"));
     }
 
     async exec(param){
         this.bot.off("location");
-        let menu = locationUI.menu(this.language);
-        await this.bot.sendMessage(param.chat.id, this.language.howContactYou , menu);
+        let menu = locationUI.menu(this.resource);
+        await this.bot.sendMessage(param.chat.id, this.resource.howContactYou , menu);
         await this.bot.on("location", async (msg) => {
             let result = await apiClient.getLocale({
+                language: this.language,
                 userId: param.from.id, 
                 latitude: msg.location.latitude, 
                 longitude: msg.location.longitude

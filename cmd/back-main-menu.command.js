@@ -7,8 +7,8 @@ class backMainMenuCommand extends commandBase{
 
     exec(param){
         this.bot.off('message');
-        let menu = mainMenu.menu(this.language);
-        this.bot.sendMessage(param.message.chat.id, this.language.chooseAnOption, menu);
+        let menu = mainMenu.menu(this.resource);
+        this.bot.sendMessage(param.message.chat.id, this.resource.chooseAnOption, menu);
     }
 }
 

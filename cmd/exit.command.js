@@ -8,7 +8,7 @@ class exitCommand extends commandBase{
 
     exec(param){
         this.bot.off('message');
-        let msg = this.language.thanksMsg;
+        let msg = this.resource.thanksMsg;
         msg = msg.replace('#emoji#', require('../emoji.js').winkingFace)
         this.bot.sendMessage(param.message.chat.id, msg, { parse_mode: 'HTML' });
     }

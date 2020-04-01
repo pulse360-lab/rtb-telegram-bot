@@ -1,6 +1,6 @@
-const commandBase = require('./command-base'),
-apiClient = require('../api/api-client');
-let returnMenuUI = require('../menu-ui/return-menu-bus');
+const apiClient = require('../api/api-client');
+const commandBase = require('./command-base');
+const returnMenuUI = require('../menu-ui/return-menu-bus');
 
 class getRouteRealTimeCommand extends commandBase{
     constructor(){
@@ -13,8 +13,8 @@ class getRouteRealTimeCommand extends commandBase{
     }
 
     async sendMessageOptionOp(param){
-        let menu = returnMenuUI.menu(this.language, JSON.parse(param.parameters).stopId);
-        await this.bot.sendMessage(param.message.chat.id, this.language.newroteMsg, menu);
+        let menu = returnMenuUI.menu(this.resource, JSON.parse(param.parameters).stopId);
+        await this.bot.sendMessage(param.message.chat.id, this.resource.newroteMsg, menu);
     }
 
     async sendMessageResult(param, result){
@@ -23,12 +23,12 @@ class getRouteRealTimeCommand extends commandBase{
             return;
         }
 
-        let msg = `${this.language.routeInfo}: ${param.routeId} \n`;
+        let msg = `${this.resource.routeInfo}: ${param.routeId} \n`;
         for (let index = 0; index < result.busInfo.length; index ++) {
             msg += '-------------------- \n';
-            msg += `${this.language.origin}: ${result.busInfo[index].origin} \n`;
-            msg += `${this.language.destination}: ${result.busInfo[index].destination} \n`;
-            msg += `${this.language.dueTime}: ${result.busInfo[index].duetime} \n`;
+            msg += `${this.resource.origin}: ${result.busInfo[index].origin} \n`;
+            msg += `${this.resource.destination}: ${result.busInfo[index].destination} \n`;
+            msg += `${this.resource.dueTime}: ${result.busInfo[index].duetime} \n`;
         }
 
         await this.bot.sendMessage(param.message.chat.id, '<code>' + msg + '</code>', { parse_mode: 'HTML' }) ;
@@ -37,6 +37,7 @@ class getRouteRealTimeCommand extends commandBase{
     async get(param){
         let objParameter = JSON.parse(param.parameters);
         let result = await apiClient.getRealTimeInfo({
+            language: this.language,
             userId: param.from.id, 
             stopNumber: objParameter.stopId, 
             routeId: param.routeId, 

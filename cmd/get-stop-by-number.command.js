@@ -12,8 +12,8 @@ class getStopByNumberCommand extends commandBase{
         await this.sendMessageOptionOp(param);
     }
     async sendMessageOptionOp(param){
-        let menu = backMenu.menu(this.language);
-        await this.bot.sendMessage(param.message.chat.id, this.language.newroteMsg, menu);
+        let menu = backMenu.menu(this.resource);
+        await this.bot.sendMessage(param.message.chat.id, this.resource.newroteMsg, menu);
     }
     
     async sendMessageResult(param, result){
@@ -36,7 +36,7 @@ class getStopByNumberCommand extends commandBase{
 
         let menuUI = require('../menu-ui/dynamic-menu');
 
-        await this.bot.sendMessage(param.message.chat.id, this.language.routerAvailable + ':', menuUI.menu([buttoms]));
+        await this.bot.sendMessage(param.message.chat.id, this.resource.routerAvailable + ':', menuUI.menu([buttoms]));
         await this.sendMessageOptionOp(param);
     }
 
@@ -46,6 +46,7 @@ class getStopByNumberCommand extends commandBase{
 
     async get(param, stopNumber){
         let result = await apiClient.getStopInformation({
+            language: this.language,
             userId: param.from.id, 
             stopNumber: stopNumber
         });              
@@ -58,7 +59,7 @@ class getStopByNumberCommand extends commandBase{
         if(arr && arr.length > 1)
             await this.get(param, arr[1])
         else{
-             await this.bot.sendMessage(param.message.chat.id, `<code>${this.language.typeBusStopNumber}: </code>`, { parse_mode: 'HTML' })
+             await this.bot.sendMessage(param.message.chat.id, `<code>${this.resource.typeBusStopNumber}: </code>`, { parse_mode: 'HTML' })
              await this.onMessage(param);
         }
     }
