@@ -7,5 +7,9 @@ module.exports = {
     party: {
         three:  "\u{1F389} \u{1F389} \u{1F389} ", 
         single: "\u{1F389}" // 🎉
+    },
+    contries: {
+        brazil: "🇧🇷",
+        usa: "🇺🇸"
     }
 }
