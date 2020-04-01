@@ -1,6 +1,6 @@
 const commandBase = require('./command-base');
 
-class help extends commandBase{
+class helpCommand extends commandBase{
     constructor(){
         super('/help');
     }
@@ -10,4 +10,4 @@ class help extends commandBase{
     }
 }
 
-module.exports = help;
+module.exports = helpCommand;

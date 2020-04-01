@@ -22,7 +22,7 @@ COPY . /app
 ENV RTB_BOT_TOKEN=${RTB_BOT_TOKEN}
 ENV TOKEN_LOCALIZATION=${TOKEN_LOCALIZATION}
 
-ENTRYPOINT ["/bin/bash" , "/app/entrypoint.sh" ]
+ENTRYPOINT ["/bin/bash" , "/app/cloud/scripts/entrypoint.sh" ]
 
 # add ENV vars
 #RTB_BOT_TOKEN=<TOKEN>

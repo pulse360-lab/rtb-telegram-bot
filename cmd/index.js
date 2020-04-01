@@ -1,9 +1,9 @@
-module.exports ={
-    getLocation : require('./get-location'),
-    getStopByNumber : require('./get-stop-by-number'),
-    backMainMenu : require('./back-main-menu'),
-    exit: require('./exit'),
-    getRouteRealTime: require('./get-route-realtime'),
-    getStopsNearMe: require('./get-stops-near-me'),
-    help: require('./help')
+module.exports = {
+    getLocationCommand : require('./get-location.command'),
+    getStopByNumberCommand : require('./get-stop-by-number.command'),
+    backMainMenuCommand : require('./back-main-menu.command'),
+    exitCommand: require('./exit.command'),
+    getRouteRealTimeCommand: require('./get-route-realtime.command'),
+    getStopsNearMeCommand: require('./get-stops-near-me.command'),
+    helpCommand: require('./help.command')
 };
